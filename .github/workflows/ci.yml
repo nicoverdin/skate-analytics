@@ -1,0 +1,92 @@
+name: Skate Analytics CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # TRABAJO 1: BACKEND (Django + Postgres)
+  backend-tests:
+    name: Backend (Test & Lint)
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: skating_db_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 # Linter
+
+      - name: Lint with Flake8 (Calidad de Código)
+        run: |
+          cd backend
+          # Detiene el build si hay errores graves de sintaxis
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Aviso si el código es muy complejo o líneas muy largas (opcional)
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Run Django Tests
+        env:
+          SECRET_KEY: 'secret-key-for-ci-only'
+          DEBUG: 'False'
+          DB_NAME: skating_db_test
+          DB_USER: postgres
+          DB_PASSWORD: password123
+          DB_HOST: localhost
+          DB_PORT: 5432
+        run: |
+          cd backend
+          python manage.py test
+
+  # TRABAJO 2: FRONTEND (Vue + Vite)
+  frontend-build:
+    name: Frontend (Build Check)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm ci # 'ci' es más rápido y seguro que 'install' para servidores
+
+      - name: Build Project
+        run: |
+          cd frontend
+          npm run build
