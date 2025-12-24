@@ -16,6 +16,8 @@ class ElementSerializer(serializers.ModelSerializer):
 
 
 class SkaterSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+
     total_score = serializers.DecimalField(
         max_digits=12, decimal_places=1, read_only=True
     )
@@ -37,7 +39,7 @@ class SkaterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skater
         fields = ['id', 'name', 'total_score', 'elements_count',
-                  'free_elements', 'style_elements']
+                  'free_elements', 'style_elements', 'user']
 
 
 class ResultSerializer(serializers.ModelSerializer):
