@@ -11,37 +11,25 @@ from rest_framework.exceptions import ValidationError
 
 
 class ElementViewSet(viewsets.ModelViewSet):
+    queryset = Element.objects.all()
     serializer_class = ElementSerializer
     filterset_fields = ['code', 'level', 'name']
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-
-        if user.is_staff:
-            return Skater.objects.all()
-
-        return Skater.objects.filter(user=user)
 
     def perform_create(self, serializer):
         try:
-            if not self.request.user.is_staff:
-                serializer.save(user=self.request.user)
-            else:
-                serializer.save()
-
+            serializer.save()
         except IntegrityError:
             raise ValidationError({
-                "detail": "An element with this generated code already exists. Adjust the level or name."
+                "detail": "An element with this generated code already exists."
             })
 
 
 class SkaterViewSet(viewsets.ModelViewSet):
-    queryset = Skater.objects.all()
     serializer_class = SkaterSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return super().get_queryset().annotate(
+        queryset = Skater.objects.annotate(
             total_score=Sum(
                 ExpressionWrapper(
                     (F('results__element__base_score') +
@@ -52,6 +40,12 @@ class SkaterViewSet(viewsets.ModelViewSet):
             ),
             elements_count=Count('results')
         ).order_by('-total_score', 'name')
+
+        user = self.request.user
+        if not user.is_staff:
+            queryset = queryset.filter(user=user)
+
+        return queryset
 
     @action(detail=True, methods=['get'])
     def average_scores(self, request, pk=None):
@@ -73,6 +67,12 @@ class SkaterViewSet(viewsets.ModelViewSet):
         )
         data = [{'name': r['name'], 'average': r['average'] or 0} for r in qs]
         return Response(data)
+
+    def perform_create(self, serializer):
+        if not self.request.user.is_staff:
+            serializer.save(user=self.request.user)
+        else:
+            serializer.save()
 
 
 class ResultViewSet(viewsets.ModelViewSet):
