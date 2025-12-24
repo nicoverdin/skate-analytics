@@ -14,7 +14,7 @@ Designed for coaches and athletes to visualize improvement over time.
 
 1.  **Clone the repo**
     ```bash
-    git clone [https://github.com/tu-usuario/ice-metrics.git](https://github.com/tu-usuario/ice-metrics.git)
+    git clone [https://github.com/nicoverdin/skate-analytics.git](https://github.com/nicoverdin/skate-analytics.git)
     cd ice-metrics
     ```
 
