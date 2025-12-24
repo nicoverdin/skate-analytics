@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'skating.apps.SkatingConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
