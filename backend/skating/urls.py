@@ -4,9 +4,9 @@ from .views import SkaterViewSet, ElementViewSet, ResultViewSet
 
 
 router = DefaultRouter()
-router.register(r'skaters', SkaterViewSet)
-router.register(r'elements', ElementViewSet)
-router.register(r'results', ResultViewSet)
+router.register(r'skaters', SkaterViewSet, basename='skater')
+router.register(r'elements', ElementViewSet, basename='element')
+router.register(r'results', ResultViewSet, basename='result')
 
 
 urlpatterns = [

@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import (
@@ -11,13 +11,25 @@ from rest_framework.exceptions import ValidationError
 
 
 class ElementViewSet(viewsets.ModelViewSet):
-    queryset = Element.objects.all()
     serializer_class = ElementSerializer
     filterset_fields = ['code', 'level', 'name']
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_staff:
+            return Skater.objects.all()
+
+        return Skater.objects.filter(user=user)
 
     def perform_create(self, serializer):
         try:
-            serializer.save()
+            if not self.request.user.is_staff:
+                serializer.save(user=self.request.user)
+            else:
+                serializer.save()
+
         except IntegrityError:
             raise ValidationError({
                 "detail": "An element with this generated code already exists. Adjust the level or name."
