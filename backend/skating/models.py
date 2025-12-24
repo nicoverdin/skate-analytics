@@ -26,7 +26,7 @@ class ElementCode(models.TextChoices):
 
 
 class Element(models.Model):
-    code = models.CharField(max_length=10, unique=True)
+    code = models.CharField(max_length=10, unique=True, blank=True)
 
     name = models.CharField(
         max_length=50, choices=ElementCode.choices, null=True
@@ -46,6 +46,19 @@ class Element(models.Model):
 
     def __str__(self):
         return f"{self.get_name_display()} (Lvl {self.level})"
+
+    def save(self, *args, **kwargs):
+        if self.level == Level.NO_LEVEL:
+            new_code = f'NL{self.name}'
+        else:
+            new_code = f'{self.name}{self.level}'
+
+        if self.name == ElementCode.TRAVELING and self.extra_points > 0:
+            new_code += f'% ({self.extra_points})'
+
+        self.code = new_code
+
+        super().save(*args, **kwargs)
 
 
 class Skater(models.Model):

@@ -6,12 +6,22 @@ from django.db.models import (
 )
 from .models import Element, Skater, Result
 from .serializers import ElementSerializer, SkaterSerializer, ResultSerializer
+from django.db import IntegrityError
+from rest_framework.exceptions import ValidationError
 
 
 class ElementViewSet(viewsets.ModelViewSet):
     queryset = Element.objects.all()
     serializer_class = ElementSerializer
     filterset_fields = ['code', 'level', 'name']
+
+    def perform_create(self, serializer):
+        try:
+            serializer.save()
+        except IntegrityError:
+            raise ValidationError({
+                "detail": "An element with this generated code already exists. Adjust the level or name."
+            })
 
 
 class SkaterViewSet(viewsets.ModelViewSet):

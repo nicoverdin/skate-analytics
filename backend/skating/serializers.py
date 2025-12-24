@@ -9,6 +9,7 @@ class ElementSerializer(serializers.ModelSerializer):
         model = Element
         fields = ['id', 'code', 'name', 'level', 'base_score', 'extra_points',
                   'total_score']
+        read_only_fields = ['code']
 
     def get_total_score(self, obj):
         return float(obj.base_score + obj.extra_points)
