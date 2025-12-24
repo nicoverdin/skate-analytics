@@ -1,52 +1,66 @@
-# Skate Analytics 📊
+# Skate Analytics ⛸️📊
 
-Platform for tracking performance, levels, and progress in Figure Skating.
-Designed for coaches and athletes to visualize improvement over time.
+[![CI Status](https://github.com/nicoverdin/skate-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/nicoverdin/skate-analytics/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Django](https://img.shields.io/badge/Django-5.0-green)
+![Vue](https://img.shields.io/badge/Vue.js-3.0-42b883)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ed)
 
-## 🚀 Tech Stack
+**Skate Analytics** is a Full Stack application designed to track, analyze, and visualize figure skating performance metrics. It provides coaches and athletes with data-driven insights to improve technical elements and program scores.
 
-* **Backend:** Python, Django, Django REST Framework.
-* **Database:** PostgreSQL (via Docker).
-* **Frontend:** Vue.js 3 + Vite (In Progress).
-* **Infrastructure:** Docker Compose.
+---
 
-## 🛠️ Quick Start (Backend)
+## 🚀 Features (Phase 1: Backend & DevOps)
 
-1.  **Clone the repo**
+* **RESTful API:** Built with Django REST Framework.
+* **Smart Scoring:** Automatic calculation of total scores based on base values, levels, and GOE.
+* **Data Integrity:** Auto-generation of technical element codes (e.g., `Tr2%`) to prevent human error.
+* **Dockerized Environment:** Full development setup using Docker & Docker Compose.
+* **CI/CD Pipeline:** GitHub Actions workflow for automated testing (Unit/Integration) and linting.
+
+## 🛠️ Tech Stack
+
+* **Backend:** Python, Django REST Framework.
+* **Database:** PostgreSQL.
+* **Frontend:** Vue 3 + Vite (In progress).
+* **DevOps:** Docker, GitHub Actions.
+
+---
+
+## 📦 How to Run
+
+Prerequisites: **Docker** and **Docker Compose**.
+
+1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/nicoverdin/skate-analytics.git](https://github.com/nicoverdin/skate-analytics.git)
-    cd ice-metrics
+    git clone [https://github.com/TU-USUARIO/skate-analytics.git](https://github.com/TU-USUARIO/skate-analytics.git)
+    cd skate-analytics
     ```
 
-2.  **Start Database**
+2.  **Start the environment:**
     ```bash
-    docker-compose up -d
+    docker-compose up -d --build
     ```
 
-3.  **Setup Backend**
+3.  **Access the API:**
+    * API Root: [http://localhost:8000/api/](http://localhost:8000/api/)
+    * Admin Panel: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+
+4.  **Run Tests:**
     ```bash
-    cd backend
-    python -m venv venv
-    source venv/bin/activate  # or venv\Scripts\activate on Windows
-    pip install -r requirements.txt
+    docker-compose exec backend python manage.py test
     ```
 
-4.  **Run Migrations & Server**
-    ```bash
-    # Create a .env file based on .env.example first!
-    python manage.py migrate
-    python manage.py runserver
-    ```
+---
 
 ## 🔌 API Endpoints
 
-The API provides a RESTful interface for all resources.
-Base URL: `http://127.0.0.1:8000/api/`
-
 | Resource | Endpoint | Description |
 | :--- | :--- | :--- |
-| **Skaters** | `/api/skaters/` | Manage skaters, creates profiles. |
-| **Elements** | `/api/elements/` | Technical elements library (jumps, spins). |
+| **Skaters** | `/api/skaters/` | Manage athletes profiles and stats. |
+| **Elements** | `/api/elements/` | Technical library (Jumps, Spins, Steps). |
 | **Results** | `/api/results/` | Log performance outcomes. |
 
-> **Pro Tip:** Visit `/api/` in your browser to explore the interactive API documentation.
+---
+
+> **Note:** This project is currently under active development. Phase 2 (Frontend Visualization) is coming next.
