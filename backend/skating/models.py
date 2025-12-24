@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.auth.models import User
 
 
 class Level(models.IntegerChoices):
@@ -62,6 +63,14 @@ class Element(models.Model):
 
 
 class Skater(models.Model):
+    user = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name='skater_profile'
+    )
+
     name = models.CharField(max_length=100)
 
     elements = models.ManyToManyField(
