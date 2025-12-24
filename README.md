@@ -37,3 +37,16 @@ Designed for coaches and athletes to visualize improvement over time.
     python manage.py migrate
     python manage.py runserver
     ```
+
+## 🔌 API Endpoints
+
+The API provides a RESTful interface for all resources.
+Base URL: `http://127.0.0.1:8000/api/`
+
+| Resource | Endpoint | Description |
+| :--- | :--- | :--- |
+| **Skaters** | `/api/skaters/` | Manage skaters, creates profiles. |
+| **Elements** | `/api/elements/` | Technical elements library (jumps, spins). |
+| **Results** | `/api/results/` | Log performance outcomes. |
+
+> **Pro Tip:** Visit `/api/` in your browser to explore the interactive API documentation.
