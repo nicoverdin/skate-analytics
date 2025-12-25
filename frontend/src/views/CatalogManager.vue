@@ -60,6 +60,33 @@
         </form>
       </div>
 
+      <div class="mb-6">
+        <div class="relative max-w-md">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="h-5 w-5 text-brand-primary" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                stroke-width="2.5" 
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+              />
+            </svg>
+          </span>
+          <input 
+            v-model="searchQuery"
+            type="text" 
+            placeholder="Search by code (e.g., 4Tr)..."
+            class="input-field pl-10 w-full focus:border-brand-primary transition-colors"
+          >
+        </div>
+      </div>
+
       <div class="card-skate overflow-x-auto">
         <table class="w-full text-left">
           <thead class="text-slate-500 text-sm uppercase tracking-wider border-b border-border-soft">
@@ -75,16 +102,21 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-white/5">
-            <tr v-for="el in elements" :key="el.id" class="hover:bg-white/5 transition">
-              <td class="p-4 font-mono font-bold text-brand-primary">{{ el.code }}</td>
-              <td class="p-4 text-slate-400">{{ el.base_score }}</td>
-              <td class="p-4 text-slate-400">{{ el.extra_points || '0.00' }}</td>
-              <td class="p-4 text-white font-semibold">{{ el.total_score }}</td>
-              <td class="p-4 text-center text-slate-400">{{ el.qoe_1 }}</td>
-              <td class="p-4 text-center text-slate-400">{{ el.qoe_2 }}</td>
-              <td class="p-4 text-center text-slate-400">{{ el.qoe_3 }}</td>
+            <tr v-for="el in filteredElements" :key="el.id" class="hover:bg-white/5 transition">
+              <td class="p-4 font-mono font-bold text-brand-primary">{{ el.code }} </td>
+              <td class="p-4 text-slate-400">{{ el.base_score }} </td>
+              <td class="p-4 text-slate-400">{{ el.extra_points || '0.00' }} </td>
+              <td class="p-4 text-white font-semibold">{{ el.total_score }} </td>
+              <td class="p-4 text-center text-slate-400">{{ el.qoe_1 }} </td>
+              <td class="p-4 text-center text-slate-400">{{ el.qoe_2 }} </td>
+              <td class="p-4 text-center text-slate-400">{{ el.qoe_3 }} </td>
               <td v-if="isAdmin" class="p-4 text-right">
                 <button @click="deleteElement(el.id)" class="text-red-400 hover:text-red-300 text-sm">Delete</button>
+              </td>
+            </tr>
+            <tr v-if="filteredElements.length === 0">
+              <td colspan="8" class="p-8 text-center text-slate-500 italic">
+                No elements found matching "{{ searchQuery }}"
               </td>
             </tr>
           </tbody>
@@ -95,21 +127,35 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import api from '../api/axios';
 
 const elements = ref([]);
 const showForm = ref(false);
+const searchQuery = ref('');
+
 const form = ref({
   name: 'Tr',
   level: 0,
   base_score: 0,
-  extra_points: 0, // Initialized
+  extra_points: 0,
   qoe_1: 0,
   qoe_2: 0,
   qoe_3: 0
 });
+
 const isAdmin = localStorage.getItem('is_staff') === 'true';
+
+// Lógica de filtrado reactiva
+const filteredElements = computed(() => {
+  const query = searchQuery.value.toLowerCase().trim();
+  if (!query) return elements.value;
+
+  return elements.value.filter(el => {
+    return el.code.toLowerCase().includes(query) || 
+           el.name.toLowerCase().includes(query);
+  });
+});
 
 const fetchElements = async () => {
   try {
@@ -123,7 +169,6 @@ const fetchElements = async () => {
 const createElement = async () => {
   try {
     await api.post('/api/elements/', form.value);
-    // Reset form with default values
     form.value = { 
       name: 'Tr', 
       level: 0, 
