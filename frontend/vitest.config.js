@@ -1,19 +1,16 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 
 export default defineConfig({
   plugins: [vue()],
+  test: {
+    environment: 'jsdom', 
+    globals: true,
+  },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  server: {
-    host: '0.0.0.0', // Imprescindible para Docker
-    port: 5173,
-    watch: {
-      usePolling: true, // Útil si los cambios no se ven en Docker
-    },
-  },
+      '@': path.resolve(__dirname, './src')
+    }
+  }
 })

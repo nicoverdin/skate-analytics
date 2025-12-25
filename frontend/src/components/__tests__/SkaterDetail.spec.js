@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import SkaterDetail from '@/views/SkaterDetail.vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createMemoryHistory } from 'vue-router';
 
 vi.mock('@/api/axios', () => ({
   default: {
@@ -19,7 +19,7 @@ vi.mock('@/api/axios', () => ({
 }));
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createMemoryHistory(),
   routes: [{ path: '/skaters/:id', component: SkaterDetail }]
 });
 
