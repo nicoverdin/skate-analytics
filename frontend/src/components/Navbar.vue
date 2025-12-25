@@ -12,6 +12,9 @@
         <router-link to="/skaters" class="nav-link" active-class="text-brand-primary font-bold">
           Patinadores
         </router-link>
+        <router-link to="/catalog" class="nav-link" active-class="text-brand-primary font-bold">
+          Valores Danza
+        </router-link>
         
         <button @click="handleLogout" class="ml-4 px-4 py-1.5 text-sm border border-red-500/30 text-red-400 rounded-md hover:bg-red-500/10 transition">
           Cerrar Sesión

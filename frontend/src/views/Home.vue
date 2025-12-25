@@ -35,10 +35,13 @@
         <h2 class="text-xl font-semibold text-white mb-6">Acciones Rápidas</h2>
         <div class="flex gap-4">
           <router-link to="/results/add" class="btn-primary">
-            Registrar Elemento
+            Registrar Resultado
           </router-link>
           <router-link to="/skaters/add" class="btn-primary text-center">
             Añadir Nuevo Patinador
+          </router-link>
+          <router-link to="/catalog" class="btn-primary text-center">
+            Gestionar Valores Elementos
           </router-link>
         </div>
       </section>

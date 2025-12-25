@@ -9,7 +9,7 @@ class ElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Element
         fields = ['id', 'code', 'name', 'level', 'base_score', 'extra_points',
-                  'total_score']
+                  'total_score', 'qoe_1', 'qoe_2', 'qoe_3']
         read_only_fields = ['code']
 
     def get_total_score(self, obj):

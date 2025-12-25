@@ -25,6 +25,7 @@ class ElementCode(models.TextChoices):
     ITALIAN_FOXTROT_2 = 'IF2', 'Italian Foxtrot Section 2'
     SWEET_TANGO = 'SWT1', 'Sweet Tango'
     TERENZI_WALTZ_1 = 'TW1', 'Terenzi Waltz Section 1'
+    QUICKSTEP_1 = 'QSS1', 'Quickstep Sequence 1'
 
 
 class Element(models.Model):
