@@ -40,7 +40,7 @@ class ElementAPITests(BaseSkateTestCase):
         response = self.client.post(self.url, self.element_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Element.objects.count(), 1)
-        self.assertEqual(Element.objects.get().code, 'Tr4% (0.5)')
+        self.assertEqual(Element.objects.get().code, 'Tr3% (0.5)')
 
     def test_create_element_forbidden_for_normal_user(self):
         """Un usuario normal no puede modificar el catálogo"""

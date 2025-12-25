@@ -57,8 +57,10 @@ class Element(models.Model):
     def save(self, *args, **kwargs):
         if self.level == Level.NO_LEVEL:
             new_code = f'NL{self.name}'
+        elif self.level == Level.BASE:
+            new_code = f'{self.name}B'
         else:
-            new_code = f'{self.name}{self.level}'
+            new_code = f'{self.name}{self.level - 1}'
 
         if self.name == ElementCode.TRAVELING and self.extra_points > 0:
             new_code += f'% ({self.extra_points})'

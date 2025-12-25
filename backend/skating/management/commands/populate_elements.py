@@ -9,7 +9,6 @@ class Command(BaseCommand):
         self.stdout.write('Eliminando elementos antiguos...')
         Element.objects.all().delete()
 
-        # Lista de elementos basada en tu PDF
         elementos_data = [
             # --- TRAVELING ---
             {'name': 'Tr', 'level': 0, 'base': 0.0, 'q1': 0.0, 'q2': 0.0, 'q3': 0.0, 'extra_points': 0.0},
@@ -18,27 +17,22 @@ class Command(BaseCommand):
             {'name': 'Tr', 'level': 3, 'base': 4.5, 'q1': 0.4, 'q2': 0.8, 'q3': 1.2, 'extra_points': 0.0},
             {'name': 'Tr', 'level': 4, 'base': 6.0, 'q1': 0.5, 'q2': 1.0, 'q3': 1.5, 'extra_points': 0.0},
             {'name': 'Tr', 'level': 5, 'base': 6.5, 'q1': 0.6, 'q2': 1.1, 'q3': 1.6, 'extra_points': 0.0},
-            {'name': 'Tr', 'level': 1, 'base': 2.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 1.0},
             {'name': 'Tr', 'level': 2, 'base': 3.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 1.0},
             {'name': 'Tr', 'level': 3, 'base': 4.5, 'q1': 0.4, 'q2': 0.8, 'q3': 1.2, 'extra_points': 1.0},
             {'name': 'Tr', 'level': 4, 'base': 6.0, 'q1': 0.5, 'q2': 1.0, 'q3': 1.5, 'extra_points': 1.0},
             {'name': 'Tr', 'level': 5, 'base': 6.5, 'q1': 0.6, 'q2': 1.1, 'q3': 1.6, 'extra_points': 1.0},
-            {'name': 'Tr', 'level': 1, 'base': 2.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 1.1},
             {'name': 'Tr', 'level': 2, 'base': 3.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 1.1},
             {'name': 'Tr', 'level': 3, 'base': 4.5, 'q1': 0.4, 'q2': 0.8, 'q3': 1.2, 'extra_points': 1.1},
             {'name': 'Tr', 'level': 4, 'base': 6.0, 'q1': 0.5, 'q2': 1.0, 'q3': 1.5, 'extra_points': 1.1},
             {'name': 'Tr', 'level': 5, 'base': 6.5, 'q1': 0.6, 'q2': 1.1, 'q3': 1.6, 'extra_points': 1.1},
-            {'name': 'Tr', 'level': 1, 'base': 2.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 1.3},
             {'name': 'Tr', 'level': 2, 'base': 3.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 1.3},
             {'name': 'Tr', 'level': 3, 'base': 4.5, 'q1': 0.4, 'q2': 0.8, 'q3': 1.2, 'extra_points': 1.3},
             {'name': 'Tr', 'level': 4, 'base': 6.0, 'q1': 0.5, 'q2': 1.0, 'q3': 1.5, 'extra_points': 1.3},
             {'name': 'Tr', 'level': 5, 'base': 6.5, 'q1': 0.6, 'q2': 1.1, 'q3': 1.6, 'extra_points': 1.3},
-            {'name': 'Tr', 'level': 1, 'base': 2.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 1.7},
             {'name': 'Tr', 'level': 2, 'base': 3.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 1.7},
             {'name': 'Tr', 'level': 3, 'base': 4.5, 'q1': 0.4, 'q2': 0.8, 'q3': 1.2, 'extra_points': 1.7},
             {'name': 'Tr', 'level': 4, 'base': 6.0, 'q1': 0.5, 'q2': 1.0, 'q3': 1.5, 'extra_points': 1.7},
             {'name': 'Tr', 'level': 5, 'base': 6.5, 'q1': 0.6, 'q2': 1.1, 'q3': 1.6, 'extra_points': 1.7},
-            {'name': 'Tr', 'level': 1, 'base': 2.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 2.0},
             {'name': 'Tr', 'level': 2, 'base': 3.5, 'q1': 0.3, 'q2': 0.6, 'q3': 0.9, 'extra_points': 2.0},
             {'name': 'Tr', 'level': 3, 'base': 4.5, 'q1': 0.4, 'q2': 0.8, 'q3': 1.2, 'extra_points': 2.0},
             {'name': 'Tr', 'level': 4, 'base': 6.0, 'q1': 0.5, 'q2': 1.0, 'q3': 1.5, 'extra_points': 2.0},
