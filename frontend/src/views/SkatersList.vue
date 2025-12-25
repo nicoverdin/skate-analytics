@@ -26,7 +26,12 @@
             </span>
           </div>
           
-          <p class="text-slate-400 text-sm mb-4">Puntuación media: --</p>
+          <p class="text-slate-400 text-sm mb-4">
+            Puntuación media: 
+            <span class="text-white font-mono">
+              {{ skater.average_score > 0 ? skater.average_score : '--' }}
+            </span>
+          </p>
 
           <div class="flex items-center text-brand-primary text-sm font-semibold">
             Ver estadísticas completo

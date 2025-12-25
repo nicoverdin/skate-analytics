@@ -19,6 +19,7 @@ class ElementSerializer(serializers.ModelSerializer):
 class SkaterSerializer(serializers.ModelSerializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
+    average_score = serializers.SerializerMethodField()
 
     total_score = serializers.DecimalField(
         max_digits=12, decimal_places=1, read_only=True
@@ -42,7 +43,15 @@ class SkaterSerializer(serializers.ModelSerializer):
         model = Skater
         fields = ['id', 'name', 'total_score', 'elements_count',
                   'free_elements', 'style_elements', 'username',
-                  'password']
+                  'password', 'average_score']
+
+    def get_average_score(self, obj):
+        results = obj.results.all()
+        if not results:
+            return 0.0
+
+        total = sum(res.total_score for res in results)
+        return round(total / len(results), 2)
 
     def create(self, validated_data):
         username = validated_data.pop('username')

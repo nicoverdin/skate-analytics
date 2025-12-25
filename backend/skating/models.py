@@ -138,7 +138,7 @@ class Result(models.Model):
 
     @property
     def total_score(self):
-        qoe_value = self.element.get_qoe_value(self.score_given)
+        qoe_value = self.element.get_qoe_value(self.qoe_given)
         return self.element.base_score + qoe_value + self.element.extra_points
 
     def __str__(self):
