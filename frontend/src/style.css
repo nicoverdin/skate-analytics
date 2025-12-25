@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+@theme {
+  --color-bg-main: #18181b;          /* Zinc 900 */
+  --color-bg-card: #27272a;          /* Zinc 800 */
+  --color-bg-input: #3f3f46;         /* Zinc 700 */
+  --color-brand-primary: #f4f4f5;    /* Zinc 100 */
+  --color-brand-secondary: #e4e4e7;  /* Zinc 200 */
+  --color-border-soft: #3f3f46;      /* Zinc 700 */
+}
+
+html, body, #app {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--color-bg-main);
+  color: #f4f4f5;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+@layer components {
+  .card-skate {
+    @apply bg-bg-card border border-border-soft rounded-xl p-6 transition-all duration-300 hover:border-slate-500 shadow-sm;
+  }
+  
+  .btn-primary {
+    /* Texto oscuro (bg-main) sobre fondo claro (brand-primary) */
+    @apply px-6 py-2 bg-brand-primary text-bg-main font-bold rounded-lg hover:bg-brand-secondary transform hover:-translate-y-0.5 transition-all shadow-md active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 bg-bg-input border border-border-soft rounded-lg text-white outline-none focus:ring-2 focus:ring-slate-400 transition-all placeholder:text-slate-500;
+  }
+}

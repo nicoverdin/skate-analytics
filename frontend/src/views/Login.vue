@@ -1,25 +1,20 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-slate-900 p-4">
-    <div class="max-w-md w-full bg-slate-800 rounded-2xl shadow-xl p-8 border border-slate-700">
+  <div class="min-h-screen flex items-center justify-center bg-bg-main p-4">
+    <div class="max-w-md w-full bg-bg-card rounded-2xl shadow-xl p-8 border border-border-soft">
       <h2 class="text-3xl font-bold text-center text-white mb-8">Skate Analytics</h2>
       
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
-          <label class="block text-sm font-medium text-slate-300">Usuario</label>
-          <input v-model="username" type="text" required 
-            class="mt-1 block w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
-            placeholder="Introduce tu usuario">
+          <label class="block text-sm font-medium text-slate-300 mb-1">Usuario</label>
+          <input v-model="username" type="text" required class="input-field" placeholder="Tu usuario">
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-300">Contraseña</label>
-          <input v-model="password" type="password" required 
-            class="mt-1 block w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
-            placeholder="••••••••">
+          <label class="block text-sm font-medium text-slate-300 mb-1">Contraseña</label>
+          <input v-model="password" type="password" required class="input-field" placeholder="••••••••">
         </div>
 
-        <button type="submit" 
-          class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-200 ease-in-out transform hover:-translate-y-1">
+        <button type="submit" class="btn-primary w-full">
           Iniciar Sesión
         </button>
       </form>
@@ -28,6 +23,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref } from 'vue';
