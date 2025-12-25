@@ -3,6 +3,9 @@
     <div class="max-w-6xl mx-auto">
       <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-white">Mis Patinadores</h1>
+        <router-link v-if="isAdmin" to="/skaters/add" class="btn-primary text-sm px-4">
+          + Añadir
+        </router-link>
         <div class="bg-brand-primary px-4 py-2 rounded-lg text-sm font-semibold text-black">
           {{ skaters.length }} Registrados
         </div>
@@ -44,6 +47,7 @@ import api from '../api/axios';
 
 const skaters = ref([]);
 const loading = ref(true);
+const isAdmin = localStorage.getItem('is_staff') === 'true';
 
 onMounted(async () => {
   try {

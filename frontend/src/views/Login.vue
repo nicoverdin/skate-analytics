@@ -45,7 +45,10 @@ const handleLogin = async () => {
     
     localStorage.setItem('access_token', response.data.access);
     localStorage.setItem('refresh_token', response.data.refresh);
-    
+
+    const userResponse = await api.get('/api/auth/user/'); 
+    localStorage.setItem('is_staff', userResponse.data.is_staff);
+
     router.push('/');
   } catch (err) {
     error.value = 'Credenciales incorrectas o error de conexión';

@@ -31,11 +31,13 @@
         </div>
       </div>
 
-      <section>
+      <section v-if="isAdmin">
         <h2 class="text-xl font-semibold text-white mb-6">Acciones Rápidas</h2>
         <div class="flex gap-4">
-          <button class="btn-primary">Registrar Salto/Elemento</button>
-          <button class="px-6 py-2 border border-border-soft rounded-lg hover:bg-white/5 transition text-sm">Configurar Club</button>
+          <button class="btn-primary">Registrar Elemento</button>
+          <router-link to="/skaters/add" class="btn-primary text-center">
+            Añadir Nuevo Patinador
+          </router-link>
         </div>
       </section>
     </div>
@@ -49,6 +51,7 @@ import api from '../api/axios';
 const totalSkaters = ref(0);
 const averagePerformance = ref(0);
 const loading = ref(true);
+const isAdmin = localStorage.getItem('is_staff') === 'true';
 
 onMounted(async () => {
   try {

@@ -19,6 +19,12 @@ const routes = [
     component: () => import('../views/SkatersList.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/skaters/add',
+    name: 'AddSkater',
+    component: () => import('../views/AddSkater.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({
@@ -28,15 +34,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!localStorage.getItem('access_token');
+  const isAdmin = localStorage.getItem('is_staff') === 'true';
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'Login' });
-  }
-
-  else if (to.name === 'Login' && isAuthenticated) {
+  } 
+  // Si la ruta requiere ser Admin y no lo es, lo mandamos al Home
+  else if (to.name === 'AddSkater' && !isAdmin) {
     next({ name: 'Home' });
   }
-
   else {
     next();
   }
