@@ -43,6 +43,12 @@ const routes = [
     component: () => import('../views/ResultsList.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/skaters/:id',
+    name: 'SkaterDetail',
+    component: () => import('../views/SkaterDetail.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({

@@ -2,12 +2,13 @@ from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import (
-    Sum, Avg, F, DecimalField, Count, ExpressionWrapper
+    Sum, F, DecimalField, Count, ExpressionWrapper
 )
 from .models import Element, Skater, Result
 from .serializers import ElementSerializer, SkaterSerializer, ResultSerializer
 from django.db import IntegrityError
 from rest_framework.exceptions import ValidationError
+from collections import defaultdict
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -59,25 +60,22 @@ class SkaterViewSet(viewsets.ModelViewSet):
         return queryset
 
     @action(detail=True, methods=['get'])
-    def average_scores(self, request, pk=None):
-        """
-        Devuelve la media de puntuación por cada tipo de elemento.
-        Útil para el gráfico de radar.
-        """
-        qs = (
-            Element.objects
-            .filter(results__skater_id=pk)
-            .values('name')
-            .annotate(average=Avg(
-                ExpressionWrapper(
-                    F('base_score') + F('extra_points'),
-                    output_field=DecimalField(max_digits=12, decimal_places=1)
-                )
-            ))
-            .order_by('name')
-        )
-        data = [{'name': r['name'], 'average': r['average'] or 0} for r in qs]
-        return Response(data)
+    def stats(self, request, pk=None):
+        skater = self.get_object()
+        results = Result.objects.filter(skater=skater).select_related('element')
+
+        grouped_data = defaultdict(list)
+        for res in results:
+            grouped_data[res.element.name].append(res.total_score)
+
+        stats = []
+        for element_name, scores in grouped_data.items():
+            stats.append({
+                'element__name': element_name,
+                'average': sum(scores) / len(scores) if scores else 0
+            })
+
+        return Response(stats)
 
     def perform_create(self, serializer):
         if not self.request.user.is_staff:

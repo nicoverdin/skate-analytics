@@ -43,7 +43,7 @@ class SkaterSerializer(serializers.ModelSerializer):
         model = Skater
         fields = ['id', 'name', 'total_score', 'elements_count',
                   'free_elements', 'style_elements', 'username',
-                  'password', 'average_score']
+                  'password', 'average_score', 'user']
 
     def get_average_score(self, obj):
         results = obj.results.all()
