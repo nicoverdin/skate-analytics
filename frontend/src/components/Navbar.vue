@@ -60,21 +60,32 @@ const handleLogout = () => {
 };
 
 onMounted(async () => {
+  const token = localStorage.getItem('access_token');
+  
+  if (!token) return;
+
   try {
-    const token = localStorage.getItem('access_token');
-    const currentUserId = token ? getUserIdFromToken(token) : null;
+    const currentUserId = getUserIdFromToken(token);
+    
+    if (currentUserId) {
+      const skatersRes = await api.get('/api/skaters/');
+      
+      const isAdmin = localStorage.getItem('is_staff') === 'true';
 
-    const skatersRes = await api.get('/api/skaters/');
-
-    if (!isAdmin && currentUserId) {
-      const myProfile = skatersRes.data.find(s => String(s.user) === String(currentUserId));
-      if (myProfile) {
-        selfId.value = myProfile.id;
-        console.log("Perfil encontrado. Skater ID:", selfId.value);
+      if (!isAdmin) {
+        const myProfile = skatersRes.data.find(s => String(s.user) === String(currentUserId));
+        if (myProfile) {
+          selfId.value = myProfile.id;
+          console.log("Perfil encontrado. Skater ID:", selfId.value);
+        }
       }
     }
   } catch (error) {
-    console.error("Error:", error);
+    if (error.response && error.response.status === 401) {
+      console.warn("Sesión expirada en Navbar. No redirigir aquí para evitar bucles.");
+    } else {
+      console.error("Error en Navbar:", error);
+    }
   }
 });
 </script>

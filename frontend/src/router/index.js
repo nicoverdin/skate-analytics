@@ -57,16 +57,17 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!localStorage.getItem('access_token');
-  const isAdmin = localStorage.getItem('is_staff') === 'true';
-
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  const token = localStorage.getItem('access_token');
+  
+  // Si la ruta requiere auth y no hay token
+  if (to.meta.requiresAuth && !token) {
     next({ name: 'Login' });
   } 
-  // Si la ruta requiere ser Admin y no lo es, lo mandamos al Home
-  else if ((to.name === 'AddSkater' || to.name === 'RegisterResult') && !isAdmin) {
-    next({ name: 'Home' });
+  // Si ya estás logueado e intentas ir al Login, mándalo al Dashboard
+  else if (to.name === 'Login' && token) {
+    next({ name: 'Dashboard' });
   }
+  // En cualquier otro caso, permite la navegación
   else {
     next();
   }

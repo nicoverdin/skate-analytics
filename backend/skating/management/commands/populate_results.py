@@ -25,7 +25,7 @@ class Command(BaseCommand):
 
             skater.results.all().delete()
 
-            num_resultados = random.randint(3, 6)
+            num_resultados = random.randint(10, 20)
 
             for _ in range(num_resultados):
                 elemento_aleatorio = random.choice(elementos)
