@@ -14,8 +14,12 @@
           <input v-model="password" name="password" type="password" required class="input-field" placeholder="••••••••">
         </div>
 
-        <button type="submit" class="btn-primary w-full">
-          Iniciar Sesión
+        <button 
+          type="submit" 
+          :disabled="loading" 
+          class="btn-primary w-full disabled:opacity-50"
+        >
+          {{ loading ? 'Entrando...' : 'Iniciar Sesión' }}
         </button>
       </form>
       
