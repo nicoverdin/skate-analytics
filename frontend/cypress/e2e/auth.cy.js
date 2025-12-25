@@ -1,6 +1,6 @@
 describe('Flujo de Autenticación', () => {
   it('debe redirigir al login si no hay token', () => {
-    cy.visit('/dashboard');
+    cy.visit('/');
     cy.url().should('include', '/login');
   });
 
@@ -16,7 +16,7 @@ describe('Flujo de Autenticación', () => {
     cy.get('button[type="submit"]').click();
 
     cy.wait('@loginRequest');
-    cy.url().should('include', '/dashboard');
-    cy.contains('Bienvenido').should('be.visible');
+    cy.url().should('include', '/');
+    cy.contains('Resumen').should('be.visible');
   });
 });

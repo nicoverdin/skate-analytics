@@ -6,12 +6,12 @@
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
           <label class="block text-sm font-medium text-slate-300 mb-1">Usuario</label>
-          <input v-model="username" type="text" required class="input-field" placeholder="Tu usuario">
+          <input v-model="username" name="username" type="text" required class="input-field" placeholder="Tu usuario">
         </div>
 
         <div>
           <label class="block text-sm font-medium text-slate-300 mb-1">Contraseña</label>
-          <input v-model="password" type="password" required class="input-field" placeholder="••••••••">
+          <input v-model="password" name="password" type="password" required class="input-field" placeholder="••••••••">
         </div>
 
         <button type="submit" class="btn-primary w-full">
