@@ -24,6 +24,7 @@ class ElementViewSet(viewsets.ModelViewSet):
     queryset = Element.objects.all()
     serializer_class = ElementSerializer
     filterset_fields = ['code', 'level', 'name']
+    permission_classes = [IsAdminOrReadOnly]
 
     def perform_create(self, serializer):
         try:
