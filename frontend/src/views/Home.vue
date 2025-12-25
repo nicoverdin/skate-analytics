@@ -209,7 +209,6 @@ onMounted(async () => {
       }
     }
 
-    // Cálculo de rendimiento...
     if (resultsRes.data.length > 0) {
       const sum = resultsRes.data.reduce((acc, curr) => acc + parseFloat(curr.total_score || 0), 0);
       averagePerformance.value = (sum / resultsRes.data.length).toFixed(1);

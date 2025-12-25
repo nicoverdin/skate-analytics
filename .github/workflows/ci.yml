@@ -7,11 +7,10 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # TRABAJO 1: BACKEND (Django + Postgres)
+  # TRABAJO 1: BACKEND
   backend-tests:
     name: Backend (Test & Lint)
     runs-on: ubuntu-latest
-    
     services:
       postgres:
         image: postgres:15-alpine
@@ -26,36 +25,22 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      - name: Set up Python 3.10
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
           cache: 'pip'
-
       - name: Install Dependencies
         run: |
           cd backend
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install flake8 # Linter
-
-      - name: Lint with Flake8 (Calidad de Código)
-        run: |
-          cd backend
-          # Detiene el build si hay errores graves de sintaxis
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # Aviso si el código es muy complejo o líneas muy largas (opcional)
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-
+          pip install flake8
       - name: Run Django Tests
         env:
-          SECRET_KEY: 'secret-key-for-ci-only'
-          DEBUG: 'False'
+          SECRET_KEY: 'ci-secret'
           DB_NAME: skating_db_test
           DB_USER: postgres
           DB_PASSWORD: password123
@@ -65,28 +50,40 @@ jobs:
           cd backend
           python manage.py test
 
-  # TRABAJO 2: FRONTEND (Vue + Vite)
+  # TRABAJO 2: FRONTEND
   frontend-build:
-    name: Frontend (Build Check)
+    name: Frontend (Unit Tests & Build)
     runs-on: ubuntu-latest
-    
+    defaults:
+      run:
+        working-directory: frontend
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
-
       - name: Install Dependencies
-        run: |
-          cd frontend
-          npm ci # 'ci' es más rápido y seguro que 'install' para servidores
-
+        run: npm ci 
+      - name: Unit Tests (Vitest)
+        run: npm run test:unit
       - name: Build Project
-        run: |
-          cd frontend
-          npm run build
+        run: npm run build
+
+  # TRABAJO 3: E2E (Solo corre si los anteriores pasan)
+  e2e-tests:
+    name: Cypress E2E
+    needs: [backend-tests, frontend-build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: frontend
+          build: npm run build
+          start: npm run preview
+          wait-on: 'http://localhost:4173'

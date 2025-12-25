@@ -62,7 +62,8 @@ class SkaterViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def stats(self, request, pk=None):
         skater = self.get_object()
-        results = Result.objects.filter(skater=skater).select_related('element')
+        results = Result.objects.filter(
+            skater=skater).select_related('element')
 
         grouped_data = defaultdict(list)
         for res in results:

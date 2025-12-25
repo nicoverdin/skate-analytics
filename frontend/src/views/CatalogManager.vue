@@ -142,7 +142,6 @@
 </style>
 
 <script setup>
-// Mantenemos la misma lógica del script original pero aseguramos que el isAdmin funcione con el CSS
 import { ref, computed, onMounted } from 'vue';
 import api from '../api/axios';
 

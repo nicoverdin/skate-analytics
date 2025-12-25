@@ -102,13 +102,12 @@ const router = useRouter();
 const skaters = ref([]);
 const elements = ref([]);
 
-// Filtros para el doble selector
 const selectedElementName = ref('');
 const selectedLevel = ref('');
 
 const form = ref({
   skater: '',
-  element: '', // ID final que se envía al backend
+  element: '',
   qoe_given: 0,
   notes: '',
   is_program: false
