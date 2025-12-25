@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Level(models.IntegerChoices):
@@ -24,21 +25,26 @@ class ElementCode(models.TextChoices):
     ITALIAN_FOXTROT_2 = 'IF2', 'Italian Foxtrot Section 2'
     SWEET_TANGO = 'SWT1', 'Sweet Tango'
     TERENZI_WALTZ_1 = 'TW1', 'Terenzi Waltz Section 1'
+    QUICKSTEP_1 = 'QSS1', 'Quickstep Sequence 1'
 
 
 class Element(models.Model):
-    code = models.CharField(max_length=10, unique=True, blank=True)
+    code = models.CharField(max_length=20, unique=True, blank=True)
 
     name = models.CharField(
         max_length=50, choices=ElementCode.choices, null=True
     )
 
     level = models.IntegerField(choices=Level.choices, default=Level.NO_LEVEL)
-    base_score = models.DecimalField(max_digits=4, decimal_places=1, default=0)
+    base_score = models.DecimalField(max_digits=4, decimal_places=2, default=0)
 
     extra_points = models.DecimalField(
         max_digits=4, decimal_places=1, default=0
     )
+
+    qoe_3 = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    qoe_2 = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    qoe_1 = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
 
     class Meta:
         ordering = ['code']
@@ -51,8 +57,10 @@ class Element(models.Model):
     def save(self, *args, **kwargs):
         if self.level == Level.NO_LEVEL:
             new_code = f'NL{self.name}'
+        elif self.level == Level.BASE:
+            new_code = f'{self.name}B'
         else:
-            new_code = f'{self.name}{self.level}'
+            new_code = f'{self.name}{self.level - 1}'
 
         if self.name == ElementCode.TRAVELING and self.extra_points > 0:
             new_code += f'% ({self.extra_points})'
@@ -61,12 +69,24 @@ class Element(models.Model):
 
         super().save(*args, **kwargs)
 
+    def get_qoe_value(self, score):
+        mapping = {
+            3: self.qoe_3,
+            2: self.qoe_2,
+            1: self.qoe_1,
+            0: 0,
+            -1: -self.qoe_1,
+            -2: -self.qoe_2,
+            -3: -self.qoe_3,
+        }
+        return mapping.get(score, 0)
+
 
 class Skater(models.Model):
     user = models.OneToOneField(
-        User, 
-        on_delete=models.CASCADE, 
-        null=True, 
+        User,
+        on_delete=models.CASCADE,
+        null=True,
         blank=True,
         related_name='skater_profile'
     )
@@ -106,6 +126,11 @@ class Result(models.Model):
         Element, on_delete=models.CASCADE, related_name='results'
     )
 
+    qoe_given = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(-3), MaxValueValidator(3)]
+    )
+
     date = models.DateTimeField(default=timezone.now)
     notes = models.TextField(blank=True)
     is_program = models.BooleanField(default=False)
@@ -113,5 +138,10 @@ class Result(models.Model):
     class Meta:
         ordering = ['-date']
 
+    @property
+    def total_score(self):
+        qoe_value = self.element.get_qoe_value(self.qoe_given)
+        return self.element.base_score + qoe_value + self.element.extra_points
+
     def __str__(self):
-        return f"{self.skater.name} - {self.element.code} - {self.date.date()}"
+        return f"{self.skater.name} - {self.element.code} ({self.qoe_given}) - {self.date.date()}"
