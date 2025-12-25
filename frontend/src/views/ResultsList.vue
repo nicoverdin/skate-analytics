@@ -37,7 +37,7 @@
                 <span class="ml-2 text-slate-500 text-sm">{{ res.element_details?.name }}</span>
               </td>
               <td class="p-4 text-center">
-                <span :class="valColor(res.score_given)" class="font-bold">
+                <span :class="valColor(res.qoe_given)" class="font-bold">
                   {{ res.qoe_given > 0 ? '+' : '' }}{{ res.qoe_given }}
                 </span>
               </td>
