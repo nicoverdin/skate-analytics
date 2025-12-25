@@ -10,6 +10,16 @@ from django.db import IntegrityError
 from rest_framework.exceptions import ValidationError
 
 
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Si la petición es de lectura (GET, HEAD, OPTIONS)
+        if request.method in permissions.SAFE_METHODS:
+            return request.user and request.user.is_authenticated
+
+        # Para crear (POST), editar o borrar, debe ser staff
+        return request.user and request.user.is_staff
+
+
 class ElementViewSet(viewsets.ModelViewSet):
     queryset = Element.objects.all()
     serializer_class = ElementSerializer
@@ -26,7 +36,7 @@ class ElementViewSet(viewsets.ModelViewSet):
 
 class SkaterViewSet(viewsets.ModelViewSet):
     serializer_class = SkaterSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
         queryset = Skater.objects.annotate(
