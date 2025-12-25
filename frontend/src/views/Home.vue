@@ -34,7 +34,9 @@
       <section v-if="isAdmin">
         <h2 class="text-xl font-semibold text-white mb-6">Acciones Rápidas</h2>
         <div class="flex gap-4">
-          <button class="btn-primary">Registrar Elemento</button>
+          <router-link to="/results/add" class="btn-primary">
+            Registrar Elemento
+          </router-link>
           <router-link to="/skaters/add" class="btn-primary text-center">
             Añadir Nuevo Patinador
           </router-link>

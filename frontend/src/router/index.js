@@ -25,6 +25,12 @@ const routes = [
     component: () => import('../views/AddSkater.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/results/add',
+    name: 'RegisterResult',
+    component: () => import('../views/RegisterResult.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({
@@ -40,7 +46,7 @@ router.beforeEach((to, from, next) => {
     next({ name: 'Login' });
   } 
   // Si la ruta requiere ser Admin y no lo es, lo mandamos al Home
-  else if (to.name === 'AddSkater' && !isAdmin) {
+  else if ((to.name === 'AddSkater' || to.name === 'RegisterResult') && !isAdmin) {
     next({ name: 'Home' });
   }
   else {

@@ -1,0 +1,173 @@
+<template>
+  <div class="p-8">
+    <div class="max-w-2xl mx-auto">
+      <header class="mb-8">
+        <router-link to="/" class="text-brand-primary text-sm hover:underline flex items-center mb-4">
+          ← Volver al Panel
+        </router-link>
+        <h1 class="text-3xl font-bold text-white">Registrar Elemento</h1>
+      </header>
+
+      <div class="card-skate">
+        <form @submit.prevent="saveResult" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-2">Patinador</label>
+            <select v-model="form.skater" required class="input-field">
+              <option value="" disabled>Selecciona un patinador</option>
+              <option v-for="s in skaters" :key="s.id" :value="s.id">{{ s.name }}</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-2">Elemento</label>
+              <select v-model="selectedElementName" required class="input-field">
+                <option value="" disabled>Elemento</option>
+                <option v-for="name in uniqueElementNames" :key="name" :value="name">
+                  {{ name }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-2">Nivel</label>
+              <select 
+                v-model="selectedLevel" 
+                :disabled="!selectedElementName" 
+                required 
+                class="input-field"
+              >
+                <option value="" disabled>Dificultad</option>
+                <option v-for="lvl in availableLevels" :key="lvl" :value="lvl">
+                  Lvl {{ lvl }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-4 text-center">
+              Calidad de Ejecución (QOE)
+            </label>
+            <div class="flex justify-between gap-2 overflow-x-auto pb-2">
+              <button 
+                v-for="val in [-3, -2, -1, 0, 1, 2, 3]" 
+                :key="val"
+                type="button"
+                @click="form.qoe_given = val"
+                :class="[
+                  'flex-1 min-w-[40px] py-3 rounded-lg font-bold transition-all border',
+                  form.qoe_given === val 
+                    ? 'bg-brand-primary text-bg-main border-brand-primary scale-110 shadow-lg' 
+                    : 'bg-bg-input text-slate-400 border-border-soft hover:bg-slate-600'
+                ]"
+              >
+                {{ val > 0 ? '+' + val : val }}
+              </button>
+            </div>
+          </div>
+
+          <div v-if="currentElement" class="bg-bg-main p-6 rounded-xl border border-border-soft space-y-2 text-center shadow-inner">
+            <p class="text-slate-500 text-xs uppercase tracking-widest font-semibold">Cálculo Estimado (Rollart 2026)</p>
+            <div class="flex justify-center items-baseline gap-2">
+              <span class="text-4xl font-mono font-bold text-brand-primary">
+                {{ (parseFloat(currentElement.base_score) + getQoeImpact()).toFixed(2) }}
+              </span>
+              <span class="text-slate-400">Puntos</span>
+            </div>
+            <p class="text-slate-500 text-xs italic">
+              Base: {{ currentElement.base_score }} | QOE: {{ getQoeImpact() > 0 ? '+' : '' }}{{ getQoeImpact() }}
+            </p>
+          </div>
+
+          <button 
+            type="submit" 
+            :disabled="!currentElement" 
+            class="btn-primary w-full py-4 text-lg font-bold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Guardar Resultado
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import api from '../api/axios';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const skaters = ref([]);
+const elements = ref([]);
+
+// Filtros para el doble selector
+const selectedElementName = ref('');
+const selectedLevel = ref('');
+
+const form = ref({
+  skater: '',
+  element: '', // ID final que se envía al backend
+  qoe_given: 0,
+  notes: '',
+  is_program: false
+});
+
+onMounted(async () => {
+  try {
+    const [sRes, eRes] = await Promise.all([
+      api.get('/api/skaters/'),
+      api.get('/api/elements/')
+    ]);
+    skaters.value = sRes.data;
+    elements.value = eRes.data;
+  } catch (error) {
+    console.error("Error cargando datos:", error);
+  }
+});
+
+const uniqueElementNames = computed(() => {
+  const names = elements.value.map(el => el.name);
+  return [...new Set(names)].sort();
+});
+
+const availableLevels = computed(() => {
+  if (!selectedElementName.value) return [];
+  return elements.value
+    .filter(el => el.name === selectedElementName.value)
+    .map(el => el.level)
+    .sort((a, b) => a - b);
+});
+
+const currentElement = computed(() => {
+  return elements.value.find(el => 
+    el.name === selectedElementName.value && 
+    el.level == selectedLevel.value
+  );
+});
+
+const getQoeImpact = () => {
+  if (!currentElement.value) return 0;
+  const val = form.value.qoe_given;
+  if (val === 0) return 0;
+  
+  const absVal = Math.abs(val);
+  const impact = parseFloat(currentElement.value[`qoe_${absVal}`] || 0);
+  
+  return val > 0 ? impact : -impact;
+};
+
+const saveResult = async () => {
+  if (!currentElement.value) return;
+  
+  try {
+    form.value.element = currentElement.value.id;
+    await api.post('/api/results/', form.value);
+    router.push('/');
+  } catch (error) {
+    alert("Error al guardar el resultado.");
+    console.error(error);
+  }
+};
+</script>
