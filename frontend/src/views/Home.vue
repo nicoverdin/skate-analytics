@@ -37,6 +37,9 @@
           <router-link to="/results/add" class="btn-primary">
             Registrar Resultado
           </router-link>
+          <router-link to="/results" class="btn-primary">
+            Ver Resultados
+          </router-link>
           <router-link to="/skaters/add" class="btn-primary text-center">
             Añadir Nuevo Patinador
           </router-link>

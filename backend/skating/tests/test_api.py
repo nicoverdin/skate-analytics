@@ -10,14 +10,14 @@ class BaseSkateTestCase(APITestCase):
     Clase base para autenticación y datos comunes.
     """
     def setUp(self):
-        # Creamos un coach (staff) y un usuario normal
         self.admin_user = User.objects.create_user(
             username='coach', password='password123', is_staff=True
         )
+
         self.normal_user = User.objects.create_user(
             username='skater_user', password='password123', is_staff=False
         )
-        # Por defecto, actuamos como admin para poder configurar el catálogo
+
         self.client.force_authenticate(user=self.admin_user)
 
 
@@ -101,3 +101,38 @@ class ResultAPITests(BaseSkateTestCase):
         response = self.client.get(self.url)
         self.assertIn('element_details', response.data[0])
         self.assertEqual(response.data[0]['element_details']['name'], 'Tr')
+
+    def test_result_includes_nested_details(self):
+        """
+        Verifica que el serializer devuelve 'skater_details' y
+        'element_details' tal como espera el frontend para mostrar nombres y
+        códigos.
+        """
+        Result.objects.create(
+            skater=self.skater, element=self.element, qoe_given=2
+        )
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.data[0]
+
+        self.assertIn('skater_details', data)
+        self.assertEqual(data['skater_details']['name'], self.skater.name)
+
+        self.assertIn('element_details', data)
+        self.assertEqual(data['element_details']['code'], self.element.code)
+
+    def test_create_result_with_id_only(self):
+        """
+        Asegura que aunque enviemos detalles para lectura,
+        la creación sigue funcionando enviando solo los IDs (PKs).
+        """
+        data = {
+            'skater': self.skater.id,
+            'element': self.element.id,
+            'qoe_given': 1,
+            'is_program': False
+        }
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

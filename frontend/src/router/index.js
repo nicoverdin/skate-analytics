@@ -37,6 +37,12 @@ const routes = [
     component: () => import('../views/CatalogManager.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/results',
+    name: 'ResultsList',
+    component: () => import('../views/ResultsList.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({

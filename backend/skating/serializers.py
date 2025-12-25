@@ -65,12 +65,14 @@ class SkaterSerializer(serializers.ModelSerializer):
 
 class ResultSerializer(serializers.ModelSerializer):
     element_details = ElementSerializer(source='element', read_only=True)
+    skater_details = SkaterSerializer(source='skater', read_only=True)
     total_score = serializers.ReadOnlyField()
 
     class Meta:
         model = Result
         fields = ['id', 'skater', 'element', 'element_details', 'qoe_given',
-                  'total_score', 'date', 'notes', 'is_program']
+                  'total_score', 'date', 'notes', 'is_program',
+                  'skater_details']
 
 
 class UserDetailSerializer(serializers.ModelSerializer):

@@ -87,6 +87,14 @@ class SkaterViewSet(viewsets.ModelViewSet):
 
 
 class ResultViewSet(viewsets.ModelViewSet):
-    queryset = Result.objects.all().select_related('element', 'skater')
     serializer_class = ResultSerializer
     filterset_fields = ['skater', 'element__code', 'is_program']
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Result.objects.all().order_by('-date')
+
+        return Result.objects.filter(
+            skater__user=user
+        ).order_by('-date')

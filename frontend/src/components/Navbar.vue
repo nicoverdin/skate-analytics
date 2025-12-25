@@ -12,6 +12,9 @@
         <router-link to="/skaters" class="nav-link" active-class="text-brand-primary font-bold">
           Patinadores
         </router-link>
+        <router-link to="/results" class="nav-link" active-class="text-brand-primary font-bold">
+          Resultados
+        </router-link>
         <router-link to="/catalog" class="nav-link" active-class="text-brand-primary font-bold">
           Valores Danza
         </router-link>
