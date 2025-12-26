@@ -14,6 +14,8 @@ export default defineConfig({
         description: 'Gestión de rendimiento técnico para patinaje artístico',
         theme_color: '#0f172a',
         background_color: '#0f172a',
+        start_url: '/',
+        scope: '/',
         display: 'standalone',
         icons: [
           {
