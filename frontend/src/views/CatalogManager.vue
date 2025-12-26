@@ -35,7 +35,7 @@
               <div class="col-span-2 md:col-span-1 space-y-1">
                 <label class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Tipo</label>
                 <div class="relative">
-                  <select v-model="form.name" required class="w-full bg-slate-900/80 border border-white/10 rounded-lg h-10 px-3 text-sm font-bold focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none appearance-none">
+                  <select v-model="form.name" required :class="inputClass" class="appearance-none font-bold">
                     <option value="Tr">Traveling (Tr)</option>
                     <option value="ASq">Art Seq (ASq)</option>
                     <option value="DSSq">Dance Step (DSSq)</option>
@@ -50,15 +50,15 @@
               </div>
               <div class="space-y-1">
                 <label class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Nivel</label>
-                <input v-model.number="form.level" type="number" min="0" max="6" class="input-modern text-center font-mono" required placeholder="0-6">
+                <input v-model.number="form.level" type="number" min="0" max="6" :class="inputClass" class="text-center font-mono" required placeholder="0-6">
               </div>
               <div class="space-y-1">
                 <label class="text-[10px] uppercase font-bold text-brand-primary tracking-wider">Base (BV)</label>
-                <input v-model="form.base_score" type="number" step="0.01" class="input-modern text-center font-bold text-brand-primary border-brand-primary/30 focus:border-brand-primary" required>
+                <input v-model="form.base_score" type="number" step="0.01" :class="inputClass" class="text-center font-bold text-brand-primary border-brand-primary/30 focus:border-brand-primary" required>
               </div>
               <div class="space-y-1">
                 <label class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Extra</label>
-                <input v-model="form.extra_points" type="number" step="0.01" class="input-modern text-center font-mono text-slate-300" placeholder="0.00">
+                <input v-model="form.extra_points" type="number" step="0.01" :class="inputClass" class="text-center font-mono text-slate-300" placeholder="0.00">
               </div>
             </div>
             
@@ -67,15 +67,15 @@
               <div class="grid grid-cols-3 gap-4">
                 <div class="space-y-1">
                   <span class="block text-center text-xs font-mono text-slate-400 mb-1">Q1</span>
-                  <input v-model="form.qoe_1" type="number" step="0.01" class="input-modern text-center bg-slate-900" placeholder="0.00">
+                  <input v-model="form.qoe_1" type="number" step="0.01" :class="inputClass" class="text-center bg-slate-900" placeholder="0.00">
                 </div>
                 <div class="space-y-1">
                   <span class="block text-center text-xs font-mono text-slate-400 mb-1">Q2</span>
-                  <input v-model="form.qoe_2" type="number" step="0.01" class="input-modern text-center bg-slate-900" placeholder="0.00">
+                  <input v-model="form.qoe_2" type="number" step="0.01" :class="inputClass" class="text-center bg-slate-900" placeholder="0.00">
                 </div>
                 <div class="space-y-1">
                   <span class="block text-center text-xs font-mono text-slate-400 mb-1">Q3</span>
-                  <input v-model="form.qoe_3" type="number" step="0.01" class="input-modern text-center bg-slate-900" placeholder="0.00">
+                  <input v-model="form.qoe_3" type="number" step="0.01" :class="inputClass" class="text-center bg-slate-900" placeholder="0.00">
                 </div>
               </div>
             </div>
@@ -205,10 +205,7 @@
 </template>
 
 <style scoped>
-.input-modern {
-  @apply w-full bg-slate-900/80 border border-white/10 rounded-lg h-10 px-3 text-sm text-white placeholder-slate-600 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none transition-all;
-}
-
+/* Solo estilos de animación, nada de @apply con clases complejas */
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
 }
@@ -231,6 +228,9 @@ const showForm = ref(false);
 const searchQuery = ref('');
 const isAdmin = localStorage.getItem('is_staff') === 'true';
 
+// AQUÍ ESTÁ EL TRUCO: Definimos los estilos como string de JS
+const inputClass = "w-full bg-slate-900/80 border border-white/10 rounded-lg h-10 px-3 text-sm text-white placeholder-slate-600 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none transition-all";
+
 const form = ref({
   name: 'Tr',
   level: 0,
@@ -243,9 +243,9 @@ const form = ref({
 
 // Helper for UI colors
 const getLevelColor = (level) => {
-    if (level >= 4) return 'bg-brand-primary';
-    if (level >= 2) return 'bg-blue-400';
-    return 'bg-slate-500';
+    if (level >= 4) return 'bg-brand-primary'; // High level
+    if (level >= 2) return 'bg-blue-400';      // Mid level
+    return 'bg-slate-500';                     // Basic level
 };
 
 const filteredElements = computed(() => {
