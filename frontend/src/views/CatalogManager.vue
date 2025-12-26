@@ -1,17 +1,19 @@
 <template>
-  <div class="p-8 text-white min-h-screen">
+  <div class="p-4 md:p-8 text-white min-h-screen pb-20">
     <div class="max-w-6xl mx-auto">
-      <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+      
+      <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
           <div class="flex items-center gap-2 mb-1">
             <span class="h-2 w-2 rounded-full bg-brand-primary animate-pulse"></span>
-            <span class="text-brand-primary text-xs font-black uppercase tracking-[0.2em]">Configuración Técnica</span>
+            <span class="text-brand-primary text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Configuración Técnica</span>
           </div>
-          <h1 class="text-4xl font-black tracking-tighter uppercase italic">Catálogo SOV 2026</h1>
-          <p class="text-slate-500 text-sm font-medium">Gestión de valores base y escalas de ejecución Rollart.</p>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tighter uppercase italic">Catálogo SOV 2026</h1>
+          <p class="text-slate-500 text-xs md:text-sm font-medium mt-1">Gestión de valores base y escalas de ejecución.</p>
         </div>
+        
         <button v-if="isAdmin" @click="showForm = !showForm" 
-                class="btn-primary flex items-center gap-2 group px-8">
+                class="w-full md:w-auto btn-primary flex justify-center items-center gap-2 group px-6 py-3">
           <span class="text-xl transition-transform group-hover:rotate-90">{{ showForm ? '×' : '+' }}</span>
           {{ showForm ? 'Cerrar Panel' : 'Añadir Elemento' }}
         </button>
@@ -19,10 +21,10 @@
 
       <transition name="fade">
         <div v-if="showForm" class="card-skate mb-10 border-brand-primary/20 bg-slate-900/50 backdrop-blur-xl shadow-2xl">
-          <form @submit.prevent="createElement" class="space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div class="space-y-1">
-                <label class="label-style">Tipo de Elemento</label>
+          <form @submit.prevent="createElement" class="space-y-6 md:space-y-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              <div class="space-y-1 col-span-2 md:col-span-1">
+                <label class="label-style">Tipo</label>
                 <select v-model="form.name" required class="input-field font-bold">
                   <option value="Tr">Traveling (Tr)</option>
                   <option value="ASq">Art Seq (ASq)</option>
@@ -33,45 +35,42 @@
                 </select>
               </div>
               <div class="space-y-1">
-                <label class="label-style">Nivel (0-5)</label>
-                <input v-model.number="form.level" type="number" min="0" max="5" class="input-field font-mono" required>
+                <label class="label-style">Nivel</label>
+                <input v-model.number="form.level" type="number" min="0" max="5" class="input-field font-mono text-center" required>
               </div>
               <div class="space-y-1">
-                <label class="label-style text-brand-primary">Valor Base (BV)</label>
-                <input v-model="form.base_score" type="number" step="0.01" class="input-field border-brand-primary/30 font-bold" required>
+                <label class="label-style text-brand-primary">Base (BV)</label>
+                <input v-model="form.base_score" type="number" step="0.01" class="input-field border-brand-primary/30 font-bold text-center" required>
               </div>
               <div class="space-y-1">
-                <label class="label-style text-brand-primary">Extra Points</label>
-                <input v-model="form.extra_points" type="number" step="0.01" class="input-field border-brand-primary/30 font-mono" placeholder="0.50">
+                <label class="label-style text-brand-primary">Extra</label>
+                <input v-model="form.extra_points" type="number" step="0.01" class="input-field border-brand-primary/30 font-mono text-center" placeholder="0.50">
               </div>
             </div>
             
-            <div class="bg-bg-main/50 p-6 rounded-2xl border border-white/5">
+            <div class="bg-bg-main/50 p-4 md:p-6 rounded-2xl border border-white/5">
               <div class="flex items-center gap-2 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                <span class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Escala de Incrementos QOE</span>
+                <span class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Escala QOE</span>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="grid grid-cols-3 gap-3 md:gap-6">
                 <div class="space-y-1">
-                  <label class="label-style !text-slate-600">QOE Nivel 1 (±)</label>
-                  <input v-model="form.qoe_1" type="number" step="0.01" class="input-field text-center" placeholder="0.00">
+                  <label class="label-style text-[10px] text-center block">Q1</label>
+                  <input v-model="form.qoe_1" type="number" step="0.01" class="input-field text-center px-1" placeholder="0.00">
                 </div>
                 <div class="space-y-1">
-                  <label class="label-style !text-slate-600">QOE Nivel 2 (±)</label>
-                  <input v-model="form.qoe_2" type="number" step="0.01" class="input-field text-center" placeholder="0.00">
+                  <label class="label-style text-[10px] text-center block">Q2</label>
+                  <input v-model="form.qoe_2" type="number" step="0.01" class="input-field text-center px-1" placeholder="0.00">
                 </div>
                 <div class="space-y-1">
-                  <label class="label-style !text-slate-600">QOE Nivel 3 (±)</label>
-                  <input v-model="form.qoe_3" type="number" step="0.01" class="input-field text-center" placeholder="0.00">
+                  <label class="label-style text-[10px] text-center block">Q3</label>
+                  <input v-model="form.qoe_3" type="number" step="0.01" class="input-field text-center px-1" placeholder="0.00">
                 </div>
               </div>
             </div>
 
             <div class="flex justify-end pt-2">
-              <button type="submit" class="btn-primary px-16 py-3 shadow-lg shadow-brand-primary/20">
-                Sincronizar con Catálogo
+              <button type="submit" class="w-full md:w-auto btn-primary px-8 py-3 shadow-lg shadow-brand-primary/20">
+                Guardar
               </button>
             </div>
           </form>
@@ -79,15 +78,66 @@
       </transition>
 
       <div class="flex flex-col gap-6">
-        <div class="relative w-full max-w-md group">
-          <input v-model="searchQuery" type="text" placeholder="Buscar por código (ej: 3Tr)..."
-                 class="input-field pl-12 h-12 border-white/10 group-hover:border-brand-primary transition-all">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-4 top-3.5 text-slate-600 group-hover:text-brand-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="relative w-full group">
+          <input v-model="searchQuery" type="text" placeholder="Buscar código..."
+                 class="input-field pl-10 md:pl-12 h-12 border-white/10 group-hover:border-brand-primary transition-all text-sm md:text-base">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 md:left-4 top-3.5 text-slate-600 group-hover:text-brand-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
 
-        <div class="card-skate !p-0 overflow-hidden shadow-2xl">
+        <div class="md:hidden grid grid-cols-1 gap-4">
+          <div v-for="el in filteredElements" :key="`mobile-${el.id}`" 
+               class="bg-slate-800/40 border border-white/5 rounded-xl p-4 active:scale-[0.99] transition-transform">
+            
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                 <span class="bg-brand-primary/10 text-brand-primary px-3 py-1 rounded text-sm font-mono font-black border border-brand-primary/20 inline-block mb-1">
+                    {{ el.code }}
+                 </span>
+                 <div class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">SOV TOTAL</div>
+              </div>
+              <div class="text-right">
+                <span class="block text-2xl font-black text-white tracking-tighter leading-none">
+                  {{ Number(el.total_score || 0).toFixed(2) }}
+                </span>
+                <span v-if="Number(el.extra_points) > 0" class="text-[10px] text-green-400 font-mono">
+                  +{{ el.extra_points }} Extra
+                </span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mb-4">
+              <div class="bg-black/20 rounded p-2 text-center border border-white/5">
+                <div class="text-[9px] text-slate-500 uppercase">Base Score</div>
+                <div class="font-mono text-slate-300">{{ Number(el.base_score || 0).toFixed(2) }}</div>
+              </div>
+              <div class="bg-black/20 rounded p-2 flex justify-between items-center px-4 border border-white/5 col-span-2">
+                <div class="text-center">
+                  <div class="text-[9px] text-slate-500">Q1</div>
+                  <div class="font-mono text-xs text-slate-400">{{ el.qoe_1 }}</div>
+                </div>
+                <div class="h-4 w-px bg-white/10"></div>
+                <div class="text-center">
+                  <div class="text-[9px] text-slate-500">Q2</div>
+                  <div class="font-mono text-xs text-slate-400">{{ el.qoe_2 }}</div>
+                </div>
+                <div class="h-4 w-px bg-white/10"></div>
+                <div class="text-center">
+                  <div class="text-[9px] text-slate-500">Q3</div>
+                  <div class="font-mono text-xs text-slate-400">{{ el.qoe_3 }}</div>
+                </div>
+              </div>
+            </div>
+
+            <button v-if="isAdmin" @click="deleteElement(el.id)" 
+                    class="w-full py-2 bg-red-500/10 text-red-400 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-red-500/20 transition">
+              Eliminar Entrada
+            </button>
+          </div>
+        </div>
+
+        <div class="hidden md:block card-skate !p-0 overflow-hidden shadow-2xl">
           <table class="w-full text-left">
             <thead class="bg-slate-800/50 text-slate-500 text-[10px] uppercase font-black tracking-widest border-b border-white/5">
               <tr>
@@ -131,6 +181,7 @@
             </tbody>
           </table>
         </div>
+
       </div>
     </div>
   </div>
