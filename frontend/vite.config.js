@@ -9,6 +9,7 @@ export default defineConfig({
     port: 5173,
     watch: {
       usePolling: true
-    }
+    },
+    allowedHosts: ['app.46.224.122.202.nip.io']
   }
 })
