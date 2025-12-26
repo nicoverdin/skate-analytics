@@ -224,7 +224,6 @@ const saveResult = async () => {
 </script>
 
 <style scoped>
-/* Pequeña animación para que aparezca suave el panel de extra score */
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }

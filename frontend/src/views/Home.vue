@@ -171,7 +171,6 @@
 import { ref, onMounted } from 'vue';
 import api from '../api/axios';
 
-// La lógica es IDÉNTICA a la que ya tenías, funciona perfecto.
 const totalSkaters = ref(0);
 const averagePerformance = ref(0);
 const loading = ref(true);
