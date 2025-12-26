@@ -3,7 +3,7 @@
     
     <Navbar v-if="route.name !== 'Login'" class="flex-none z-50" />
     
-    <main class="flex-grow overflow-y-auto overflow-x-hidden scroll-smooth pb-[env(safe-area-inset-bottom)]">
+    <main class="flex-grow overflow-y-auto overflow-x-hidden scroll-smooth">
       <div class="w-full" style="height: calc(80px + env(safe-area-inset-top));"></div>
       
       <router-view />
@@ -19,7 +19,6 @@ const route = useRoute();
 </script>
 
 <style>
-/* Forzar scroll nativo suave en iOS dentro del main */
 main {
   -webkit-overflow-scrolling: touch;
 }
