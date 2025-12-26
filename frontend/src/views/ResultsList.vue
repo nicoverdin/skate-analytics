@@ -40,6 +40,7 @@
                 <th class="p-5 text-center">Grado Ejecución (QOE)</th>
                 <th class="p-5 text-center">Score Final</th>
                 <th class="p-5 text-right">Timestamp</th>
+                <th v-if="isAdmin" class="p-5 text-right">Acción</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-white/5">
@@ -76,9 +77,22 @@
                     <span class="text-slate-600 text-[10px] font-bold uppercase">{{ formatDate(res.date).split(',')[1] }}</span>
                   </div>
                 </td>
+                
+                <td v-if="isAdmin" class="p-5 text-right">
+                  <button 
+                    @click="deleteResult(res.id)" 
+                    class="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white p-2 rounded-lg transition-all duration-300 group/del"
+                    title="Eliminar registro"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
+
               </tr>
               <tr v-if="filteredResults.length === 0">
-                <td colspan="5" class="p-20 text-center text-slate-600 italic font-medium">
+                <td :colspan="isAdmin ? 6 : 4" class="p-20 text-center text-slate-600 italic font-medium">
                   No se han encontrado registros técnicos para este filtro.
                 </td>
               </tr>
@@ -116,6 +130,23 @@ const filteredResults = computed(() => {
   if (!selectedSkaterId.value) return results.value;
   return results.value.filter(r => r.skater === parseInt(selectedSkaterId.value));
 });
+
+// 3. NUEVA FUNCIÓN PARA ELIMINAR
+const deleteResult = async (id) => {
+  // Confirmación simple del navegador
+  if (!confirm('¿Estás seguro de que deseas eliminar este registro técnico? Esta acción es irreversible.')) {
+    return;
+  }
+
+  try {
+    await api.delete(`/api/results/${id}/`);
+    // Eliminamos el item de la lista localmente para no tener que recargar toda la página
+    results.value = results.value.filter(r => r.id !== id);
+  } catch (error) {
+    console.error("Error al eliminar el resultado:", error);
+    alert("Hubo un error al intentar eliminar el registro.");
+  }
+};
 
 const valColor = (val) => {
   if (val > 0) return 'text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.3)]';
