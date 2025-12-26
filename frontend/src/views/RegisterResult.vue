@@ -136,7 +136,6 @@ const form = ref({
   skater: '',
   element: '',
   qoe_given: 0,
-  extra_points: 0,
   notes: '',
   is_program: false
 });
@@ -194,7 +193,8 @@ const getLevelLabel = (lvl) => {
 const currentElement = computed(() => {
   return elements.value.find(el => 
     el.name === selectedElementName.value && 
-    el.level == selectedLevel.value
+    el.level == selectedLevel.value &&
+    el.extra_points == form.value.extra_points
   );
 });
 

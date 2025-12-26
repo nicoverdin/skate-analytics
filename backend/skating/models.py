@@ -131,10 +131,6 @@ class Result(models.Model):
         validators=[MinValueValidator(-3), MaxValueValidator(3)]
     )
 
-    extra_points = models.DecimalField(
-        max_digits=4, decimal_places=1, default=0
-    )
-
     date = models.DateTimeField(default=timezone.now)
     notes = models.TextField(blank=True)
     is_program = models.BooleanField(default=False)
@@ -145,7 +141,7 @@ class Result(models.Model):
     @property
     def total_score(self):
         qoe_value = self.element.get_qoe_value(self.qoe_given)
-        return self.element.base_score + qoe_value + self.extra_points
+        return self.element.base_score + qoe_value + self.element.extra_points
 
     def __str__(self):
         return f"{self.skater.name} - {self.element.code} ({self.qoe_given}) - {self.date.date()}"
