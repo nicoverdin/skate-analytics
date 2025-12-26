@@ -10,6 +10,6 @@ export default defineConfig({
     watch: {
       usePolling: true
     },
-    allowedHosts: ['app.46.224.122.202.nip.io']
+    allowedHosts: ['skate-analytics.duckdns.org']
   }
 })
