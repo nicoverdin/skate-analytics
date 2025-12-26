@@ -39,7 +39,7 @@
               >
                 <option value="" disabled>Dificultad</option>
                 <option v-for="lvl in availableLevels" :key="lvl" :value="lvl">
-                  Lvl {{ lvl }}
+                  {{ getLevelLabel(lvl) }}
                 </option>
               </select>
             </div>
@@ -76,7 +76,7 @@
               <span class="text-slate-400">Puntos</span>
             </div>
             <p class="text-slate-500 text-xs italic">
-              Base: {{ currentElement.base_score }} | QOE: {{ getQoeImpact() > 0 ? '+' : '' }}{{ getQoeImpact() }}
+              {{ currentElement.code }} ({{ getLevelLabel(currentElement.level) }}) | QOE: {{ getQoeImpact() > 0 ? '+' : '' }}{{ getQoeImpact() }}
             </p>
           </div>
 
@@ -138,6 +138,18 @@ const availableLevels = computed(() => {
     .map(el => el.level)
     .sort((a, b) => a - b);
 });
+
+const getLevelLabel = (lvl) => {
+  const map = {
+    0: 'NL (No Level)',
+    1: 'B (Base)',
+    2: 'Nivel 1',
+    3: 'Nivel 2',
+    4: 'Nivel 3',
+    5: 'Nivel 4'
+  };
+  return map[lvl] || `Lvl ${lvl}`;
+};
 
 const currentElement = computed(() => {
   return elements.value.find(el => 
