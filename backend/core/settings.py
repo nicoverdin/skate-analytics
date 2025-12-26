@@ -166,7 +166,7 @@ SIMPLE_JWT = {
 ACCOUNT_LOGIN_METHODS = {'username'}
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
-CORS_ALLOWED_ORIGINS = config.get('CORS_ALLOWED_ORIGINS', '').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', '').split(',')
 
 CORS_ALLOWED_ORIGINS = [origin.strip() for origin in CORS_ALLOWED_ORIGINS if origin.strip()]
 
