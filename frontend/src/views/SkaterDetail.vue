@@ -3,12 +3,15 @@
     <div class="max-w-6xl mx-auto" v-if="skater">
       
       <header class="mb-8">
-        <router-link to="/skaters" class="inline-flex items-center text-slate-500 hover:text-brand-primary text-xs font-bold uppercase tracking-wider mb-4 transition-colors">
+        <button 
+          @click="goBack" 
+          class="inline-flex items-center text-slate-500 hover:text-brand-primary text-xs font-bold uppercase tracking-wider mb-4 transition-colors bg-transparent border-none p-0 cursor-pointer"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Volver a la lista
-        </router-link>
+        </button>
 
         <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div>
@@ -106,7 +109,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import api from '../api/axios';
 import { Radar } from 'vue-chartjs';
 import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js';
@@ -114,8 +117,13 @@ import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler,
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 const route = useRoute();
+const router = useRouter();
 const skater = ref(null);
 const elementStats = ref([]);
+
+const goBack = () => {
+  router.push('/skaters');
+};
 
 const chartData = computed(() => ({
   labels: elementStats.value.map(s => s.element__name),

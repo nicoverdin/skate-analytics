@@ -30,15 +30,15 @@
               <span class="text-slate-500 text-[10px] md:text-xs font-bold uppercase">Atletas</span>
             </div>
 
-            <router-link 
-              to="/skaters" 
-              class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-brand-primary text-slate-300 hover:text-bg-main rounded-lg text-xs font-bold transition-all duration-300 border border-slate-700 hover:border-brand-primary"
+            <button 
+              @click="navigate('/skaters')" 
+              class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-brand-primary text-slate-300 hover:text-bg-main rounded-lg text-xs font-bold transition-all duration-300 border border-slate-700 hover:border-brand-primary cursor-pointer"
             >
               Gestionar
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
               </svg>
-            </router-link>
+            </button>
           </div>
         </div>
 
@@ -57,16 +57,16 @@
           <div class="relative z-10 flex items-center justify-between">
             <div v-if="loading" class="h-6 w-24 bg-slate-700 animate-pulse rounded"></div>
             
-            <router-link 
+            <button 
               v-else-if="selfId"
-              :to="`/skaters/${selfId}`" 
-              class="flex items-center gap-2 bg-brand-primary/10 hover:bg-brand-primary text-brand-primary hover:text-bg-main px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-300"
+              @click="navigate(`/skaters/${selfId}`)" 
+              class="flex items-center gap-2 bg-brand-primary/10 hover:bg-brand-primary text-brand-primary hover:text-bg-main px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 cursor-pointer"
             >
               Ver Análisis
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-            </router-link>
+            </button>
 
             <span v-else class="text-slate-500 text-xs italic">Perfil no vinculado</span>
           </div>
@@ -122,16 +122,17 @@
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           
-          <router-link to="/results/add" class="group bg-bg-card border border-border-soft p-4 md:p-5 rounded-2xl hover:border-brand-primary transition-all duration-300 shadow-sm hover:shadow-brand-primary/10">
+          <div @click="navigate('/results/add')" class="cursor-pointer group bg-bg-card border border-border-soft p-4 md:p-5 rounded-2xl hover:border-brand-primary transition-all duration-300 shadow-sm hover:shadow-brand-primary/10">
             <div class="bg-slate-800 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-brand-primary group-hover:text-bg-main transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <h3 class="text-white text-sm md:text-base font-bold mb-1">Registrar</h3> <p class="text-slate-500 text-[10px] md:text-xs">Añadir puntuaciones.</p>
-          </router-link>
+            <h3 class="text-white text-sm md:text-base font-bold mb-1">Registrar</h3> 
+            <p class="text-slate-500 text-[10px] md:text-xs">Añadir puntuaciones.</p>
+          </div>
 
-          <router-link to="/results" class="group bg-bg-card border border-border-soft p-4 md:p-5 rounded-2xl hover:border-brand-primary transition-all duration-300 shadow-sm hover:shadow-brand-primary/10">
+          <div @click="navigate('/results')" class="cursor-pointer group bg-bg-card border border-border-soft p-4 md:p-5 rounded-2xl hover:border-brand-primary transition-all duration-300 shadow-sm hover:shadow-brand-primary/10">
             <div class="bg-slate-800 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-brand-primary group-hover:text-bg-main transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -139,9 +140,9 @@
             </div>
             <h3 class="text-white text-sm md:text-base font-bold mb-1">Historial</h3>
             <p class="text-slate-500 text-[10px] md:text-xs">Ver registros.</p>
-          </router-link>
+          </div>
 
-          <router-link to="/skaters/add" class="group bg-bg-card border border-border-soft p-4 md:p-5 rounded-2xl hover:border-brand-primary transition-all duration-300 shadow-sm hover:shadow-brand-primary/10">
+          <div @click="navigate('/skaters/add')" class="cursor-pointer group bg-bg-card border border-border-soft p-4 md:p-5 rounded-2xl hover:border-brand-primary transition-all duration-300 shadow-sm hover:shadow-brand-primary/10">
             <div class="bg-slate-800 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-brand-primary group-hover:text-bg-main transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -149,9 +150,9 @@
             </div>
             <h3 class="text-white text-sm md:text-base font-bold mb-1">Patinadores</h3>
             <p class="text-slate-500 text-[10px] md:text-xs">Crear perfiles.</p>
-          </router-link>
+          </div>
 
-          <router-link to="/catalog" class="group bg-bg-card border border-border-soft p-4 md:p-5 rounded-2xl hover:border-brand-primary transition-all duration-300 shadow-sm hover:shadow-brand-primary/10">
+          <div @click="navigate('/catalog')" class="cursor-pointer group bg-bg-card border border-border-soft p-4 md:p-5 rounded-2xl hover:border-brand-primary transition-all duration-300 shadow-sm hover:shadow-brand-primary/10">
             <div class="bg-slate-800 w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center mb-3 md:mb-4 group-hover:bg-brand-primary group-hover:text-bg-main transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -160,7 +161,7 @@
             </div>
             <h3 class="text-white text-sm md:text-base font-bold mb-1">Catálogo</h3>
             <p class="text-slate-500 text-[10px] md:text-xs">Valores SOV.</p>
-          </router-link>
+          </div>
         </div>
       </section>
     </div>
@@ -169,6 +170,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import api from '../api/axios';
 
 const totalSkaters = ref(0);
@@ -176,6 +178,11 @@ const averagePerformance = ref(0);
 const loading = ref(true);
 const isAdmin = localStorage.getItem('is_staff') === 'true';
 const selfId = ref(null);
+const router = useRouter();
+
+const navigate = (path) => {
+  router.push(path);
+};
 
 const getUserIdFromToken = (token) => {
   try {
