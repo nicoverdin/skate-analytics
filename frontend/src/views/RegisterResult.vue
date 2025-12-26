@@ -55,10 +55,10 @@
                   v-for="score in [0, 1.0, 1.1, 1.3, 1.7, 2.0]" 
                   :key="score"
                   type="button"
-                  @click="form.extra_score = score"
+                  @click="form.extra_points = score"
                   :class="[
                     'py-2 px-1 rounded-lg text-sm font-bold transition-all border',
-                    form.extra_score === score 
+                    form.extra_points === score 
                       ? 'bg-brand-primary text-bg-main border-brand-primary shadow-lg scale-105' 
                       : 'bg-bg-input text-slate-400 border-border-soft hover:bg-slate-700'
                   ]"
@@ -94,14 +94,14 @@
             <p class="text-slate-500 text-xs uppercase tracking-widest font-semibold">Cálculo Estimado (Rollart 2026)</p>
             <div class="flex justify-center items-baseline gap-2">
               <span class="text-4xl font-mono font-bold text-brand-primary">
-                {{ (parseFloat(currentElement.base_score) + form.extra_score + getQoeImpact()).toFixed(2) }}
+                {{ (parseFloat(currentElement.base_score) + form.extra_points + getQoeImpact()).toFixed(2) }}
               </span>
               <span class="text-slate-400">Puntos</span>
             </div>
             <p class="text-slate-500 text-xs italic">
               Base: {{ currentElement.base_score }} 
-              <span v-if="form.extra_score > 0" class="text-brand-primary font-bold">
-                 + Extra: {{ form.extra_score.toFixed(1) }}
+              <span v-if="form.extra_points > 0" class="text-brand-primary font-bold">
+                 + Extra: {{ form.extra_points.toFixed(1) }}
               </span>
               | QOE: {{ getQoeImpact() > 0 ? '+' : '' }}{{ getQoeImpact() }}
             </p>
@@ -136,7 +136,7 @@ const form = ref({
   skater: '',
   element: '',
   qoe_given: 0,
-  extra_score: 0, // <--- NUEVO CAMPO
+  extra_points: 0,
   notes: '',
   is_program: false
 });
@@ -147,7 +147,7 @@ const isTraveling = computed(() => {
 
 const handleElementChange = () => {
   if (!isTraveling.value) {
-    form.value.extra_score = 0;
+    form.value.extra_points = 0;
   }
 };
 
