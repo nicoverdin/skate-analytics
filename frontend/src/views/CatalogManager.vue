@@ -102,7 +102,7 @@
             
             <div class="absolute left-0 top-0 bottom-0 w-1" :class="getLevelColor(el.level)"></div>
 
-            <div class="flex justify-between items-start mb-3 pl-2">
+            <div class="flex justify-between items-start mb-4 pl-2">
               <div>
                  <div class="flex items-center gap-2">
                    <span class="text-xl font-black text-white tracking-tight">{{ el.code }}</span>
@@ -121,27 +121,31 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-px bg-white/5 rounded-lg overflow-hidden border border-white/5 ml-2">
-              <div class="p-1.5 text-center bg-slate-900/50">
-                <div class="text-[8px] text-slate-500 uppercase font-bold">Q1</div>
-                <div class="text-xs font-mono font-bold text-slate-300">{{ el.qoe_1 }}</div>
+            <div class="flex items-end gap-3 pl-2">
+              
+              <div class="flex-1 grid grid-cols-3 gap-px bg-white/5 rounded-lg overflow-hidden border border-white/5">
+                <div class="p-1.5 text-center bg-slate-900/50">
+                  <div class="text-[8px] text-slate-500 uppercase font-bold">Q1</div>
+                  <div class="text-xs font-mono font-bold text-slate-300">{{ el.qoe_1 }}</div>
+                </div>
+                <div class="p-1.5 text-center bg-slate-900/50">
+                  <div class="text-[8px] text-slate-500 uppercase font-bold">Q2</div>
+                  <div class="text-xs font-mono font-bold text-slate-300">{{ el.qoe_2 }}</div>
+                </div>
+                <div class="p-1.5 text-center bg-slate-900/50">
+                  <div class="text-[8px] text-slate-500 uppercase font-bold">Q3</div>
+                  <div class="text-xs font-mono font-bold text-slate-300">{{ el.qoe_3 }}</div>
+                </div>
               </div>
-              <div class="p-1.5 text-center bg-slate-900/50">
-                <div class="text-[8px] text-slate-500 uppercase font-bold">Q2</div>
-                <div class="text-xs font-mono font-bold text-slate-300">{{ el.qoe_2 }}</div>
-              </div>
-              <div class="p-1.5 text-center bg-slate-900/50">
-                <div class="text-[8px] text-slate-500 uppercase font-bold">Q3</div>
-                <div class="text-xs font-mono font-bold text-slate-300">{{ el.qoe_3 }}</div>
-              </div>
+
+              <button v-if="isAdmin" @click="deleteElement(el.id)" 
+                      class="flex-none bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-colors p-2.5 rounded-lg border border-red-500/20 shadow-sm h-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
             </div>
 
-            <button v-if="isAdmin" @click="deleteElement(el.id)" 
-                    class="absolute top-4 right-4 text-slate-600 hover:text-red-500 transition-colors p-2 -mr-2 -mt-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
           </div>
         </div>
 
@@ -205,7 +209,6 @@
 </template>
 
 <style scoped>
-/* Solo estilos de animación, nada de @apply con clases complejas */
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
 }
@@ -228,7 +231,6 @@ const showForm = ref(false);
 const searchQuery = ref('');
 const isAdmin = localStorage.getItem('is_staff') === 'true';
 
-// AQUÍ ESTÁ EL TRUCO: Definimos los estilos como string de JS
 const inputClass = "w-full bg-slate-900/80 border border-white/10 rounded-lg h-10 px-3 text-sm text-white placeholder-slate-600 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary outline-none transition-all";
 
 const form = ref({
@@ -241,11 +243,10 @@ const form = ref({
   qoe_3: 0
 });
 
-// Helper for UI colors
 const getLevelColor = (level) => {
-    if (level >= 4) return 'bg-brand-primary'; // High level
-    if (level >= 2) return 'bg-blue-400';      // Mid level
-    return 'bg-slate-500';                     // Basic level
+    if (level >= 4) return 'bg-brand-primary'; 
+    if (level >= 2) return 'bg-blue-400';      
+    return 'bg-slate-500';                     
 };
 
 const filteredElements = computed(() => {
