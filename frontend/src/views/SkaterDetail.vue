@@ -4,7 +4,6 @@
       <header class="flex justify-between items-center mb-10">
         <div>
           <h1 class="text-4xl font-bold mb-2">{{ skater.name }}</h1>
-          <p class="text-slate-400">ID de Patinador: {{ skater.id }}</p>
         </div>
         <div class="bg-bg-card border border-border-soft px-6 py-3 rounded-2xl">
           <span class="text-slate-500 text-sm block">Puntuación Media Total</span>
