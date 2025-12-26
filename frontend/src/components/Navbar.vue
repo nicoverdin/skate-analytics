@@ -21,21 +21,21 @@
         </button>
 
         <div class="hidden md:flex items-center space-x-8">
-          <button @click="navigate('/')" :class="isActive('/')">Inicio</button>
+          <button @click="navigate('/')" :class="getDesktopClass('/')">Inicio</button>
           
-          <button v-if="!isAdmin && selfId" @click="navigate(`/skaters/${selfId}`)" :class="isActive(`/skaters/${selfId}`)">
+          <button v-if="!isAdmin && selfId" @click="navigate(`/skaters/${selfId}`)" :class="getDesktopClass(`/skaters/${selfId}`)">
             Mi Rendimiento
           </button>
           
-          <button v-if="isAdmin" @click="navigate('/skaters')" :class="isActive('/skaters')">
+          <button v-if="isAdmin" @click="navigate('/skaters')" :class="getDesktopClass('/skaters')">
             Patinadores
           </button>
           
-          <button @click="navigate('/results')" :class="isActive('/results')">
+          <button @click="navigate('/results')" :class="getDesktopClass('/results')">
             Resultados
           </button>
           
-          <button @click="navigate('/catalog')" :class="isActive('/catalog')">
+          <button @click="navigate('/catalog')" :class="getDesktopClass('/catalog')">
             Catálogo SOV
           </button>
           
@@ -46,27 +46,27 @@
       </div>
 
       <div v-show="isMenuOpen" class="md:hidden mt-4 border-t border-border-soft pt-4 flex flex-col space-y-4 pb-4 animate-fade-in">
-          <button @click="navigate('/')" class="mobile-nav-link" :class="isActiveMobile('/')">
+          <button @click="navigate('/')" :class="getMobileClass('/')">
             Inicio
           </button>
           
-          <button v-if="!isAdmin && selfId" @click="navigate(`/skaters/${selfId}`)" class="mobile-nav-link" :class="isActiveMobile(`/skaters/${selfId}`)">
+          <button v-if="!isAdmin && selfId" @click="navigate(`/skaters/${selfId}`)" :class="getMobileClass(`/skaters/${selfId}`)">
             Mi Rendimiento
           </button>
           
-          <button v-if="isAdmin" @click="navigate('/skaters')" class="mobile-nav-link" :class="isActiveMobile('/skaters')">
+          <button v-if="isAdmin" @click="navigate('/skaters')" :class="getMobileClass('/skaters')">
             Patinadores
           </button>
           
-          <button @click="navigate('/results')" class="mobile-nav-link" :class="isActiveMobile('/results')">
+          <button @click="navigate('/results')" :class="getMobileClass('/results')">
             Resultados
           </button>
           
-          <button @click="navigate('/catalog')" class="mobile-nav-link" :class="isActiveMobile('/catalog')">
+          <button @click="navigate('/catalog')" :class="getMobileClass('/catalog')">
             Catálogo SOV
           </button>
           
-          <button @click="handleLogout" class="w-full text-left mobile-nav-link text-red-400 hover:text-red-300 border-t border-white/5 pt-4 mt-2">
+          <button @click="handleLogout" class="w-full text-left block text-base font-medium transition-colors px-3 py-2 rounded text-red-400 hover:text-red-300 border-t border-white/5 pt-4 mt-2">
             Cerrar Sesión
           </button>
       </div>
@@ -85,7 +85,6 @@ const router = useRouter();
 const route = useRoute();
 const isAdmin = localStorage.getItem('is_staff') === 'true';
 const selfId = ref(null);
-
 const isMenuOpen = ref(false);
 
 const toggleMenu = () => {
@@ -97,16 +96,20 @@ const navigate = (path) => {
   router.push(path);
 };
 
-const isActive = (path) => {
-  return route.path === path 
-    ? 'text-sm font-bold text-brand-primary' 
-    : 'text-sm font-medium text-slate-400 hover:text-brand-primary transition-colors';
+const baseDesktop = "text-sm font-medium transition-colors";
+const activeDesktop = "text-brand-primary font-bold";
+const inactiveDesktop = "text-slate-400 hover:text-brand-primary";
+
+const getDesktopClass = (path) => {
+  return route.path === path ? `${baseDesktop} ${activeDesktop}` : `${baseDesktop} ${inactiveDesktop}`;
 };
 
-const isActiveMobile = (path) => {
-  return route.path === path
-    ? 'text-brand-primary font-bold bg-white/5'
-    : 'text-slate-300';
+const baseMobile = "block text-base font-medium transition-colors px-3 py-2 rounded text-left w-full";
+const activeMobile = "text-brand-primary font-bold bg-white/5";
+const inactiveMobile = "text-slate-300 hover:text-brand-primary hover:bg-white/5";
+
+const getMobileClass = (path) => {
+  return route.path === path ? `${baseMobile} ${activeMobile}` : `${baseMobile} ${inactiveMobile}`;
 };
 
 const getUserIdFromToken = (token) => {
@@ -116,7 +119,6 @@ const getUserIdFromToken = (token) => {
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-
     return JSON.parse(jsonPayload).user_id;
   } catch (e) {
     return null;
@@ -131,36 +133,23 @@ const handleLogout = () => {
 
 onMounted(async () => {
   const token = localStorage.getItem('access_token');
-  
   if (!token) return;
-
   try {
     const currentUserId = getUserIdFromToken(token);
-    
     if (currentUserId) {
       const skatersRes = await api.get('/api/skaters/');
-      const isAdminCheck = localStorage.getItem('is_staff') === 'true';
-
-      if (!isAdminCheck) {
+      if (localStorage.getItem('is_staff') !== 'true') {
         const myProfile = skatersRes.data.find(s => String(s.user) === String(currentUserId));
-        if (myProfile) {
-          selfId.value = myProfile.id;
-        }
+        if (myProfile) selfId.value = myProfile.id;
       }
     }
   } catch (error) {
-    if (error.response && error.response.status === 401) {
-      console.warn("Sesión expirada.");
-    }
+    if (error.response && error.response.status === 401) console.warn("Sesión expirada.");
   }
 });
 </script>
 
 <style scoped>
-.mobile-nav-link {
-  @apply block text-base font-medium transition-colors px-3 py-2 rounded text-left w-full;
-}
-
 .animate-fade-in {
   animation: fadeIn 0.2s ease-in-out;
 }
