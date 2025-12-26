@@ -4,8 +4,7 @@ services:
   backend:
     build: ./backend
     container_name: skate_backend
-    command: ls -la /app
-    #volumes:
+    command: python manage.py runserver 0.0.0.0:8000    #volumes:
     #  - ./backend:/app
     expose:
       - "8000"
