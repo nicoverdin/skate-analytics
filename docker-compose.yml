@@ -5,8 +5,8 @@ services:
     build: ./backend
     container_name: skate_backend
     command: ls -la /app
-    volumes:
-      - ./backend:/app
+    #volumes:
+    #  - ./backend:/app
     expose:
       - "8000"
     environment:
