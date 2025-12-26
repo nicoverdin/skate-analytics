@@ -1,12 +1,13 @@
 <template>
-  <div class="p-8 text-white min-h-screen">
+  <div class="p-4 md:p-8 text-white min-h-screen pb-20">
     <div class="max-w-6xl mx-auto">
-      <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+      
+      <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 md:mb-12">
         <div class="flex items-center gap-4">
-          <div class="h-12 w-1.5 bg-brand-primary rounded-full shadow-[0_0_15px_rgba(244,244,245,0.3)]"></div>
+          <div class="h-10 w-1 md:h-12 md:w-1.5 bg-brand-primary rounded-full shadow-[0_0_15px_rgba(244,244,245,0.3)]"></div>
           <div>
-            <h1 class="text-4xl font-black tracking-tighter uppercase italic">Analytics</h1>
-            <p class="text-slate-500 font-medium text-sm">Registro histórico de rendimiento técnico</p>
+            <h1 class="text-3xl md:text-4xl font-black tracking-tighter uppercase italic">Analytics</h1>
+            <p class="text-slate-500 font-medium text-xs md:text-sm">Registro histórico de rendimiento</p>
           </div>
         </div>
         
@@ -15,7 +16,7 @@
             Filtrar Atleta
           </label>
           <div class="relative">
-            <select v-model="selectedSkaterId" class="input-field pl-10 h-12 appearance-none cursor-pointer hover:border-brand-primary transition-colors">
+            <select v-model="selectedSkaterId" class="input-field pl-10 h-12 appearance-none cursor-pointer hover:border-brand-primary transition-colors text-sm">
               <option value="">Todos los perfiles</option>
               <option v-for="s in skaters" :key="s.id" :value="s.id">
                 {{ s.name }}
@@ -30,7 +31,55 @@
         </div>
       </header>
 
-      <div class="card-skate !p-0 overflow-hidden border-white/5 shadow-2xl">
+      <div class="md:hidden space-y-4">
+        <div v-for="res in filteredResults" :key="`mob-${res.id}`" 
+             class="bg-slate-800/40 border border-white/5 rounded-xl p-5 relative overflow-hidden">
+          
+          <div class="flex justify-between items-start mb-3 text-[10px] uppercase font-bold tracking-wider text-slate-500">
+            <span>{{ formatDate(res.date) }}</span>
+            <span v-if="isAdmin && res.skater_details" class="text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border border-brand-primary/20">
+              {{ res.skater_details.name }}
+            </span>
+          </div>
+
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <span class="text-2xl font-black text-white italic tracking-tighter block leading-none mb-1">
+                {{ res.element_details?.code }}
+              </span>
+              <span class="text-xs text-slate-400 font-medium block">
+                {{ res.element_details?.name }}
+              </span>
+            </div>
+            <div class="text-right">
+              <span class="block text-3xl font-black text-white tracking-tighter tabular-nums text-shadow-glow">
+                {{ res.total_score.toFixed(2) }}
+              </span>
+              <span class="text-[10px] text-slate-500 uppercase">Total Points</span>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center pt-3 border-t border-white/5">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold text-slate-500 uppercase">QOE:</span>
+              <span :class="valColor(res.qoe_given)" class="text-sm font-mono font-black bg-slate-900 px-2 py-0.5 rounded border border-white/5">
+                 {{ res.qoe_given > 0 ? '+' : '' }}{{ res.qoe_given }}
+              </span>
+            </div>
+
+            <button v-if="isAdmin" @click="deleteResult(res.id)" 
+                    class="text-red-400 bg-red-500/10 px-3 py-1.5 rounded-lg text-xs font-bold uppercase hover:bg-red-500 hover:text-white transition-colors">
+              Eliminar
+            </button>
+          </div>
+        </div>
+
+        <div v-if="filteredResults.length === 0" class="text-center p-10 text-slate-500 text-sm italic">
+          No hay registros para mostrar.
+        </div>
+      </div>
+
+      <div class="hidden md:block card-skate !p-0 overflow-hidden border-white/5 shadow-2xl">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead class="bg-slate-800/50 text-slate-400 text-[10px] uppercase font-black tracking-[0.2em] border-b border-white/5">
@@ -77,7 +126,6 @@
                     <span class="text-slate-600 text-[10px] font-bold uppercase">{{ formatDate(res.date).split(',')[1] }}</span>
                   </div>
                 </td>
-                
                 <td v-if="isAdmin" class="p-5 text-right">
                   <button 
                     @click="deleteResult(res.id)" 
@@ -89,7 +137,6 @@
                     </svg>
                   </button>
                 </td>
-
               </tr>
               <tr v-if="filteredResults.length === 0">
                 <td :colspan="isAdmin ? 6 : 4" class="p-20 text-center text-slate-600 italic font-medium">
@@ -100,9 +147,16 @@
           </table>
         </div>
       </div>
+
     </div>
   </div>
 </template>
+
+<style scoped>
+.text-shadow-glow {
+  text-shadow: 0 0 20px rgba(255,255,255,0.1);
+}
+</style>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
@@ -131,16 +185,13 @@ const filteredResults = computed(() => {
   return results.value.filter(r => r.skater === parseInt(selectedSkaterId.value));
 });
 
-// 3. NUEVA FUNCIÓN PARA ELIMINAR
 const deleteResult = async (id) => {
-  // Confirmación simple del navegador
   if (!confirm('¿Estás seguro de que deseas eliminar este registro técnico? Esta acción es irreversible.')) {
     return;
   }
 
   try {
     await api.delete(`/api/results/${id}/`);
-    // Eliminamos el item de la lista localmente para no tener que recargar toda la página
     results.value = results.value.filter(r => r.id !== id);
   } catch (error) {
     console.error("Error al eliminar el resultado:", error);
