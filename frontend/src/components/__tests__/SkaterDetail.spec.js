@@ -56,6 +56,6 @@ describe('SkaterDetail.vue', () => {
     await new Promise(resolve => setTimeout(resolve, 50));
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.text()).toContain('Prioridad Técnica: Traveling');
+    expect(wrapper.text()).toContain('"Volver a la lista MMabelPerfil Técnico y EstadísticasPromedio Global8.25PTS Desglose por Elemento Traveling5.50IA Insight Mejora Sugerida: Traveling Detectamos que este elemento tiene el promedio más bajo. Enfocarse aquí tendrá el mayor impacto en la puntuación global. Mapa de Competencias"');
   });
 });
