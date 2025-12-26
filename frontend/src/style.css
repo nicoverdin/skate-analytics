@@ -9,14 +9,40 @@
   --color-border-soft: #3f3f46;      /* Zinc 700 */
 }
 
-html, body, #app {
-  min-height: 100vh;
-  margin: 0;
+/* 🔒 CONFIGURACIÓN "APP NATIVA" PARA IOS */
+:root {
+  /* Evita que iOS intente navegar atrás/adelante al deslizar el dedo */
+  touch-action: pan-x pan-y;
+  color-scheme: dark; /* Fuerza controles nativos oscuros */
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* PROHIBIDO SCROLL GLOBAL */
   background-color: var(--color-bg-main);
   color: #f4f4f5;
   font-family: 'Inter', system-ui, sans-serif;
 }
 
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* PROHIBIDO SCROLL GLOBAL */
+  position: fixed; /* CLAVE: Congela el body para que Safari no saque barras */
+  overscroll-behavior: none; /* Elimina el efecto rebote elástico */
+  -webkit-tap-highlight-color: transparent; /* Quita el cuadro gris al pulsar */
+  -webkit-user-select: none; /* Evita selección de texto accidental */
+  user-select: none;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  /* El scroll real ocurrirá dentro del <main> en App.vue */
+}
+
+/* --- COMPONENTES --- */
 @layer components {
   .card-skate {
     @apply bg-bg-card border border-border-soft rounded-xl p-6 transition-all duration-300 hover:border-slate-500 shadow-sm;
@@ -24,7 +50,7 @@ html, body, #app {
   
   .btn-primary {
     /* Texto oscuro (bg-main) sobre fondo claro (brand-primary) */
-    @apply px-6 py-2 bg-brand-primary text-bg-main font-bold rounded-lg hover:bg-brand-secondary transform hover:-translate-y-0.5 transition-all shadow-md active:scale-95;
+    @apply px-6 py-2 bg-brand-primary text-bg-main font-bold rounded-lg hover:bg-brand-secondary transform hover:-translate-y-0.5 transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center;
   }
 
   .input-field {

@@ -43,9 +43,7 @@
       </div>
     </div>
   </nav>
-  
-  <div class="w-full bg-bg-main" style="height: calc(70px + env(safe-area-inset-top));"></div>
-</template>
+  </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
