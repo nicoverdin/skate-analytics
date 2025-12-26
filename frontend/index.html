@@ -10,32 +10,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SkateApp">
     
-    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="manifest" href="/manifest.json">
     
+    <link rel="apple-touch-icon" href="/pwa-192x192.png">
     <title>Skate Analytics</title>
   </head>
-  <body class="bg-slate-900">
+  <body class="bg-slate-900 overflow-hidden fixed w-full h-full">
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
-
-    <script>
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const isStandalone = window.navigator.standalone || (window.matchMedia('(display-mode: standalone)').matches);
-
-      if (isIOS && isStandalone) {
-        document.addEventListener('click', function(e) {
-          let target = e.target;
-          
-          while (target && target.tagName !== 'A') {
-            target = target.parentNode;
-          }
-
-          if (target && target.tagName === 'A' && target.href.includes(window.location.origin)) {
-            e.preventDefault();
-            window.location.href = target.href;
-          }
-        }, false);
-      }
-    </script>
   </body>
 </html>

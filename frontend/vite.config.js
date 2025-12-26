@@ -7,34 +7,10 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
-      manifest: {
-        name: 'Skate Analytics',
-        short_name: 'SkateApp',
-        description: 'Gestión de rendimiento técnico para patinaje artístico',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
-        start_url: '/',
-        scope: '/',
-        display: 'standalone',
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
+      // IMPORTANTE: Le decimos que NO genere el manifiesto, que use el nuestro
+      manifest: false, 
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
       }
     })
   ],
