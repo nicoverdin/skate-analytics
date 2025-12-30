@@ -4,46 +4,55 @@
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![Vue](https://img.shields.io/badge/Vue.js-3.x-4fc08d)
 ![Django](https://img.shields.io/badge/Django-5.0-green)
-![JWT](https://img.shields.io/badge/Auth-JWT-orange)
+![PWA](https://img.shields.io/badge/PWA-iOS%20Optimized-ff69b4)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ed)
+![Cloud](https://img.shields.io/badge/Deployment-Coolify-6366f1)
 
-**Skate Analytics** is a Full Stack application designed to track, analyze, and visualize figure skating performance metrics. It provides coaches and athletes with data-driven insights to improve technical elements and program scores through an interactive web interface.
+**Skate Analytics** is a Full Stack application designed to track, analyze, and visualize figure skating performance metrics. It provides coaches and athletes with data-driven insights to improve technical elements and program scores through a high-performance web interface.
 
 ---
 
-## 📈 Frontend & Visualization (Phase 3 Complete)
+## 📱 Native PWA Experience (iOS & Mobile Optimized)
 
-The interface is built with **Vue 3** and **Vite**, transforming raw API data into actionable insights:
-* **Interactive Dashboards:** Real-time visualization of performance trends using **Chart.js**.
-* **API Integration:** Seamless communication with the Django REST backend using **Axios**.
-* **Responsive UI:** Built with **Tailwind CSS** to ensure coaches can track data from any device (mobile/tablet/desktop).
-* **Dynamic Scoring:** Visual feedback on Base Value (BV) and Quality of Execution (QOE) for every logged element.
+The application has been engineered to bridge the gap between web and native mobile apps, specifically targeting **Safari/iOS** limitations:
+* **Immersive UI:** Full-screen experience using `viewport-fit=cover` and custom manifest configurations to eliminate browser navigation bars.
+* **Scroll Jail & Elasticity Control:** Advanced CSS/JS architecture to block "rubber-banding" effects, providing a fixed-frame native feel.
+* **Safe-Area Integration:** Dynamic layout adjustments to respect the **Notch** and **Dynamic Island** on modern iPhones.
+* **Touch-First Design:** Optimized for rapid data entry during training sessions with zero-latency interactions.
 
+---
 
+## ☁️ Infrastructure & Cloud Deployment
+
+Moving beyond `localhost`, the project is now live in a production environment:
+* **Cloud Hosting:** Orchestrated on a **VPS** using **Coolify** for seamless CI/CD.
+* **Containerization:** Fully dockerized stack (PostgreSQL, Django, Vue, Nginx).
+* **Secure Access:** Automated SSL certification via Let's Encrypt and custom domain routing.
+* **Automated Pipeline:** Integrated GitHub Actions for continuous testing and deployment.
 
 ---
 
 ## 🚀 Key Features
 
 * **RESTful API:** Robust backend built with Django REST Framework.
-* **Performance Analytics:** Visual breakdown of elements consistency.
-* **Smart Scoring:** Automatic calculation of total scores.
-* **Security & RBAC:** * **Skaters:** Personal dashboard with private progress tracking.
-    * **Admins:** Management of technical element libraries and global stats.
-* **Dockerized Stack:** Orchestrated environment for both Backend (Django) and Frontend (Vue).
+* **Performance Analytics:** Visual breakdown of element consistency and scoring trends.
+* **Interactive Dashboards:** Real-time visualization using **Chart.js**.
+* **Smart Scoring:** Automatic calculation of Base Value (BV) and Quality of Execution (QOE).
+* **RBAC (Role-Based Access Control):** * **Skaters:** Private progress tracking and performance history.
+    * **Admins:** Management of technical element libraries (SOV) and global statistics.
 
 ---
 
 ## 🛠️ Tech Stack
 
 * **Backend:** Python 3.10, Django REST Framework, PostgreSQL.
-* **Frontend:** Vue 3, Vite, Axios, Tailwind CSS, Chart.js.
-* **Security:** JWT (SimpleJWT), Django AllAuth.
-* **DevOps:** Docker & Docker Compose, GitHub Actions (CI/CD).
+* **Frontend:** Vue 3 (Composition API), Vite, Axios, Tailwind CSS, Chart.js.
+* **DevOps:** Docker & Docker Compose, Coolify, GitHub Actions.
+* **Security:** JWT (SimpleJWT), Django AllAuth, HTTPS/SSL.
 
 ---
 
-## 📦 Quick Start
+## 📦 Quick Start (Local Development)
 
 Prerequisites: **Docker** and **Docker Compose**.
 
@@ -72,8 +81,8 @@ Prerequisites: **Docker** and **Docker Compose**.
 | :--- | :--- | :--- | :--- |
 | **Auth** | `/api/auth/` | No | Login, logout, and token refresh. |
 | **Skaters** | `/api/skaters/` | **Yes** | User-specific athlete profiles. |
-| **Elements** | `/api/elements/` | **Yes** | Technical library (Jumps, Spins). |
-| **Results** | `/api/results/` | **Yes** | Performance outcomes and scores. |
+| **Elements** | `/api/elements/` | **Yes** | Technical SOV library (Jumps, Spins). |
+| **Results** | `/api/results/` | **Yes** | Performance outcomes and scoring data. |
 
 ---
 
@@ -81,8 +90,8 @@ Prerequisites: **Docker** and **Docker Compose**.
 
 - [x] **Phase 1:** Backend Core & DevOps (Models, Serializers, CI/CD).
 - [x] **Phase 2:** Authentication & Security (JWT, Permissions).
-- [x] **Phase 3:** Frontend Visualization (Vue 3, Dashboards, Axios Integration).
+- [x] **Phase 3:** Frontend & Cloud (Vue 3, PWA Optimization, VPS Deployment).
 - [ ] **Phase 4:** Competition Management & PDF Reporting.
 
 ---
-> **Current Status:** Phase 3 is complete. The application now features a fully functional reactive dashboard.
+> **Current Status:** Live in Production. The application is now fully accessible as a PWA with real-time data visualization.
