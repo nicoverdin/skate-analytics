@@ -1,8 +1,12 @@
-asgiref==3.11.0
-Django==5.2.9
-django-cors-headers==4.9.0
-djangorestframework==3.16.1
-psycopg2-binary==2.9.11
-python-decouple==3.8
-sqlparse==0.5.5
-typing_extensions==4.15.0
+# Django base
+Django>=4.2.0
+djangorestframework>=3.14.0
+psycopg2-binary>=2.9.9
+dj-database-url>=2.1.0
+gunicorn>=21.2.0
+
+# Autenticación y Seguridad (Aquí estaba el fallo)
+dj-rest-auth>=5.0.0
+django-allauth>=0.61.0
+djangorestframework-simplejwt>=5.3.1
+django-cors-headers>=4.3.1
