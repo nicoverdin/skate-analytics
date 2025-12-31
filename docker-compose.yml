@@ -1,53 +1,22 @@
 version: '3.8'
-
 services:
   backend:
     build: ./backend
     container_name: skate_backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: 'python manage.py runserver 0.0.0.0:8000'
     expose:
-      - "8000"
+      - '8000'
     environment:
-      - SECRET_KEY=${SECRET_KEY}
+      - 'SECRET_KEY=${SECRET_KEY}'
       - DEBUG=True
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_HOST=db
-      - DB_PORT=5432
-    depends_on:
-      - db
-
+      - 'DATABASE_URL=${DATABASE_URL}' 
+  
   frontend:
     build: ./frontend
     expose:
-      - "5173"
+      - '5173'
     environment:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
       - backend
 
-  db:
-    image: postgres:15-alpine
-    restart: always
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-    expose:
-      - "5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "5050:80"
-    depends_on:
-      - db
-
-volumes:
-  postgres_data:
