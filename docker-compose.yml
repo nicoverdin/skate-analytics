@@ -4,16 +4,15 @@ services:
   backend:
     build: ./backend
     container_name: skate_backend
-    command: python manage.py runserver 0.0.0.0:8000    #volumes:
-    #  - ./backend:/app
+    command: python manage.py runserver 0.0.0.0:8000
     expose:
       - "8000"
     environment:
-      - SECRET_KEY=dev_secret_key
+      - SECRET_KEY=${SECRET_KEY}
       - DEBUG=True
-      - DB_NAME=skating_db
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=db
       - DB_PORT=5432
     depends_on:
@@ -21,9 +20,6 @@ services:
 
   frontend:
     build: ./frontend
-    #volumes:
-    #  - ./frontend:/app
-    #  - /app/node_modules
     expose:
       - "5173"
     environment:
@@ -35,11 +31,11 @@ services:
     image: postgres:15-alpine
     restart: always
     environment:
-      - POSTGRES_DB=skating_db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "127.0.0.1:5432:5432"
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    expose:
+      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
