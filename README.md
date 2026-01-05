@@ -1,4 +1,8 @@
-# Skate Analytics 📊
+<div align="center">
+  <img src="assets/banner.png" alt="RustChain Banner" width="100%">
+  <br>
+  <h1>Skate Analytics 📊</h1>
+</div>
 
 [![CI Status](https://github.com/nicoverdin/skate-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/nicoverdin/skate-analytics/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
