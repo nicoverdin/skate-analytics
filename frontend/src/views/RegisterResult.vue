@@ -218,13 +218,12 @@ const availableLevels = computed(() => {
 
 const getLevelLabel = (lvl) => {
   const map = {
-    0: 'Base (Lvl 0)',
-    1: 'Nivel 1',
-    2: 'Nivel 2',
-    3: 'Nivel 3',
-    4: 'Nivel 4',
-    5: 'Nivel 5',
-    6: 'Nivel 6'
+    0: 'No Level (NL)',
+    1: 'Nivel Base',
+    2: 'Nivel 1',
+    3: 'Nivel 2',
+    4: 'Nivel 3',
+    5: 'Nivel 4',
   };
   return map[lvl] || `Nivel ${lvl}`;
 };
